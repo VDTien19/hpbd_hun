@@ -1,7 +1,7 @@
-import { Outlet } from "react-router-dom";
+// import { Outlet } from "react-router-dom";
 import styles from "./Layout.module.scss";
 
-function Layout() {
+function Layout({ children }) {
     return (
         <div className={styles.layout}>
             <div className={styles.background} />
@@ -24,7 +24,8 @@ function Layout() {
             <div className={styles.blur} />
 
             <div className={styles.content}>
-                <Outlet />
+                {/* <Outlet /> */}
+                {children}
             </div>
         </div>
     );
