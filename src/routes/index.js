@@ -1,9 +1,13 @@
-import Home from '@/pages/Home';
-import Following from '@/pages/Following';
+import Password from '@/pages/Password';
+import Gifts from '@/pages/Gifts';
+import Questions from '@/pages/Questions';
+import Wishes from '@/pages/Wishes';
 
 const publicRoutes = [
-    { path: '/', component: Home },
-    { path: '/following', component: Following },
+    { path: '/', component: Password },
+    { path: '/gifts', component: Gifts },
+    { path: '/questions', component: Questions },
+    { path: '/wishes', component: Wishes },
 ]
 
 const privateRoutes = [
