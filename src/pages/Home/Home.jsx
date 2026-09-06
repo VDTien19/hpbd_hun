@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Password() {
+function Home() {
 
     return (
         <h1 className="">
@@ -9,4 +9,4 @@ function Password() {
     );
 }
 
-export default Password;
+export default Home;
