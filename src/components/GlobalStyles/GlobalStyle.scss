@@ -1,3 +1,4 @@
+// @import "tailwindcss";
 @import 'normalize.css';
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
@@ -27,8 +28,6 @@ h3 {
     font-family: 'Baloo 2', cursive;
 }
 
-@import 'normalize.css';
-
 :root {
     --primary-color: #c19c58;
     --green-color: #0ed794;
@@ -45,15 +44,6 @@ h3 {
 
 * {
     box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-    font-size: 62.5%;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    background: #f5f5f5;
-    user-select: none;
 }
 
 // Scrollbar CSS
