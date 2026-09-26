@@ -1,5 +1,7 @@
 .box {
-    width: min(90%, 800px);
+    // width: min(90%, auto);
+    width: max-content;
+    // height: min(50%, 500px);
     // min-width: 68%;
     padding: 3rem;
 

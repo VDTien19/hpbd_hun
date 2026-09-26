@@ -9,7 +9,7 @@ const publicRoutes = [
     { path: '/', component: Home, layout: BoxLayout },
     { path: '/gifts', component: Gifts },
     { path: '/questions', component: Questions },
-    { path: '/wishes', component: Wishes, layout: BoxLayout },
+    { path: '/wishes', component: Wishes },
 ]
 
 const privateRoutes = [

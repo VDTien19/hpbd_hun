@@ -25,6 +25,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .imageBox {
+        // margin-right: 12px;
+        margin-left: 32px;
+    }
+
+    .passKey {
+        margin-left: 100px;
+        margin-right: 32px;
+    }
 }
 
 .content {
@@ -43,6 +53,11 @@
 
         .passKey {
             width: 100%;
+            margin: 0;
+        }
+
+        .imageBox {
+            margin: 0;
         }
     }
 }
