@@ -10,11 +10,25 @@
     inset: 0;
     z-index: 0;
 
-    background: radial-gradient(
-        circle at top,
-        #fff5f8,
-        #ffdce8
-    );
+    background-image: url('@/assets/images/background.png');
+    background-size: cover;
+    // background-position: center;
+    background-repeat: no-repeat;
+
+    // background: radial-gradient(
+    //     circle at top,
+    //     #fff5f8,
+    //     #ffdce8
+    // );
+}
+
+@media (max-width: 576px) {
+    .background {
+        background-image: url('@/assets/images/background_mobile.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
 }
 
 .hearts {

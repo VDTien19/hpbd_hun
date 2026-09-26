@@ -6,22 +6,18 @@ function Layout({ children }) {
         <div className={styles.layout}>
             <div className={styles.background} />
 
-            <div className={styles.hearts} aria-hidden="true">
+            {/* <div className={styles.hearts} aria-hidden="true">
                 {Array.from({ length: 25 }, (_, index) => (
                     <span
                         key={index}
                         className={styles.heart}
                     >
                         ❤
-                        {/* ♥ */}
-                        {/* ❤️ */}
-                        {/* 🎈 */}
-                        {/* 💗 */}
                     </span>
                 ))}
             </div>
 
-            <div className={styles.blur} />
+            <div className={styles.blur} /> */}
 
             <div className={styles.content}>
                 {/* <Outlet /> */}
