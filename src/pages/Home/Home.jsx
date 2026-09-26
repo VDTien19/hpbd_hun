@@ -77,7 +77,7 @@ function Home() {
     return (
         <div className={styles.wrapper}>
             <div className={styles.content}>
-                <CharacterImage status={status} />
+                <div className={styles.imageBox}><CharacterImage status={status} /></div>
                 <div className={styles.passKey}>
                     <PasswordDisplay
                         password={password}

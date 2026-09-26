@@ -1,0 +1,201 @@
+.wrapper {
+    width: 400px;
+    // height: 400px;
+
+    .name {
+        font-size: 44px;
+        font-weight: 600;
+        height: 60px;
+    }
+
+    .messageText {
+        width: 100%;
+        height: calc(100% - 60px);
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        scrollbar-width: none;
+    }
+}
+
+.wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.text {
+    margin: 0;
+
+    white-space: pre-line;
+
+    // font-family: 'Baloo 2', cursive;
+    font-size: 28px;
+
+    overflow-wrap: break-word;
+    word-break: break-word;
+    color: #6B4545;
+}
+
+.nextButton {
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: center;
+
+    animation:
+        showButton 0.6s ease
+        forwards;
+}
+
+.button {
+    min-width: 140px;
+
+    padding:
+        10px
+        22px;
+
+    border-radius: 999px;
+    border: 1px solid var(--primary-color);
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.button:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(
+            0,
+            0,
+            0,
+            0.1
+        );
+    border: none;
+}
+
+.button:active {
+    transform:
+        translateY(0)
+        scale(0.97);
+}
+
+@keyframes showButton {
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+.cursor {
+    animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .wrapper {
+        width: 100%;
+        max-width: 420px;
+
+        /*
+         * Không cố nhét toàn bộ lời chúc
+         * vào một khung 300px nữa.
+         */
+        height: auto;
+
+        overflow: visible;
+
+        box-sizing: border-box;
+
+        padding:
+            22px
+            18px
+            28px;
+
+        border-radius: 22px;
+
+        background:
+            rgba(
+                255,
+                255,
+                255,
+                0.72
+            );
+
+        border:
+            1px solid
+            rgba(
+                255,
+                255,
+                255,
+                0.65
+            );
+
+        backdrop-filter:
+            blur(7px);
+
+        -webkit-backdrop-filter:
+            blur(7px);
+
+        box-shadow:
+            0 10px 30px
+            rgba(
+                80,
+                40,
+                40,
+                0.08
+            );
+    }
+
+    .name {
+        margin:
+            0
+            0
+            14px;
+
+        text-align: center;
+
+        font-size: 28px;
+        line-height: 1.2;
+    }
+
+    .text {
+        margin: 0;
+
+        /*
+         * Đoạn dài nên nhỏ hơn desktop
+         * nhưng tăng line-height.
+         */
+        font-size: 18px;
+
+        line-height: 1.7;
+
+        /*
+         * Text dài đọc dễ hơn nếu
+         * không dùng center.
+         */
+        text-align: left;
+
+        white-space: pre-line;
+    }
+}
