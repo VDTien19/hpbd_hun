@@ -1,0 +1,263 @@
+.optionsGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+}
+
+/*
+ * TEXTAREA
+ */
+
+.textarea {
+    width: 100%;
+    height: 150px;
+
+    box-sizing: border-box;
+
+    padding:
+        16px
+        18px;
+
+    resize: none;
+
+    outline: none;
+
+    border:
+        1px solid
+        rgba(
+            245,
+            138,
+            170,
+            0.27
+        );
+
+    border-radius: 16px;
+
+    background:
+        rgba(
+            255,
+            249,
+            244,
+            0.72
+        );
+
+    color:
+        var(--question-text);
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size: 15px;
+
+    line-height: 1.65;
+
+    transition:
+        border-color 200ms ease,
+        box-shadow 200ms ease,
+        background 200ms ease;
+}
+
+.textarea::placeholder {
+    color:
+        rgba(
+            155,
+            122,
+            130,
+            0.66
+        );
+}
+
+.textarea:focus {
+    border-color:
+        rgba(
+            245,
+            138,
+            170,
+            0.7
+        );
+
+    background:
+        rgba(
+            255,
+            252,
+            249,
+            0.96
+        );
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            245,
+            138,
+            170,
+            0.08
+        );
+}
+
+/*
+ * Q3
+ */
+
+.futureMessage {
+    position: relative;
+}
+
+.textareaLabel {
+    margin-bottom: 8px;
+
+    color:
+        var(--question-subtext);
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.letter {
+    position: absolute;
+
+    right: 18px;
+    bottom: 14px;
+
+    color:
+        var(--question-pink);
+
+    font-size: 24px;
+
+    opacity: 0.18;
+
+    pointer-events: none;
+}
+
+/*
+ * CHECKBOX
+ */
+
+.secretOption {
+    margin-top: 14px;
+
+    display: inline-flex;
+    align-items: center;
+
+    gap: 9px;
+
+    color:
+        var(--question-subtext);
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    user-select: none;
+}
+
+.secretOption input {
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.checkbox {
+    width: 19px;
+    height: 19px;
+
+    flex:
+        0
+        0
+        19px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(
+            245,
+            138,
+            170,
+            0.45
+        );
+
+    border-radius: 6px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.7
+        );
+
+    color: transparent;
+
+    font-size: 12px;
+
+    transition:
+        background 200ms ease,
+        border-color 200ms ease,
+        color 200ms ease;
+}
+
+.secretOption
+    input:checked
+    + .checkbox {
+    color: #fff;
+
+    border-color:
+        var(--question-pink);
+
+    background:
+        var(--question-pink);
+}
+
+@media (max-width: 576px) {
+    .optionsGrid {
+        grid-template-columns:
+            minmax(0, 1fr);
+
+        gap: 9px;
+    }
+
+    .textarea {
+        height: 135px;
+
+        padding:
+            13px
+            14px;
+
+        border-radius: 14px;
+
+        font-size: 14px;
+    }
+}
+
+@media (
+    prefers-reduced-motion:
+        reduce
+) {
+    .textarea,
+    .checkbox {
+        transition: none;
+    }
+}

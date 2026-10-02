@@ -1,0 +1,170 @@
+.wrapper {
+    position: relative;
+
+    width: 100%;
+    min-height: 68px;
+
+    padding:
+        13px
+        38px
+        13px
+        14px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    border:
+        1px solid
+        rgba(
+            245,
+            138,
+            170,
+            0.26
+        );
+
+    border-radius: 16px;
+
+    outline: none;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.52
+        );
+
+    color:
+        var(--question-text);
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform 200ms ease,
+        border-color 200ms ease,
+        background 200ms ease,
+        box-shadow 200ms ease;
+}
+
+.wrapper:hover {
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(
+            245,
+            138,
+            170,
+            0.65
+        );
+
+    background:
+        rgba(
+            255,
+            244,
+            248,
+            0.9
+        );
+}
+
+.icon {
+    flex:
+        0
+        0
+        auto;
+
+    font-size: 22px;
+}
+
+.label {
+    flex: 1;
+}
+
+.heart {
+    position: absolute;
+
+    top: 50%;
+    right: 14px;
+
+    transform:
+        translateY(-50%);
+
+    color:
+        var(--question-pink);
+
+    opacity: 0;
+
+    transition:
+        opacity 200ms ease;
+}
+
+.selected {
+    border-color:
+        var(--question-pink);
+
+    background:
+        rgba(
+            255,
+            220,
+            232,
+            0.58
+        );
+
+    box-shadow:
+        0 8px 24px
+        rgba(
+            245,
+            138,
+            170,
+            0.12
+        );
+}
+
+.selected .heart {
+    opacity: 1;
+}
+
+@media (max-width: 576px) {
+    .wrapper {
+        min-height: 58px;
+
+        padding:
+            10px
+            38px
+            10px
+            13px;
+
+        border-radius: 14px;
+
+        font-size: 13px;
+    }
+
+    .icon {
+        width: 30px;
+
+        font-size: 20px;
+
+        text-align: center;
+    }
+}
+
+@media (
+    prefers-reduced-motion:
+        reduce
+) {
+    .wrapper,
+    .heart {
+        transition: none;
+    }
+}

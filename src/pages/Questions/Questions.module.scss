@@ -1,0 +1,458 @@
+.wrapper {
+    --question-pink: #f58aaa;
+    --question-pink-2: #ff8fb5;
+    --question-light-pink: #ffdce8;
+    --question-cream: #fff9f4;
+    --question-lavender: #e9e3ff;
+    --question-blue: #dcebff;
+
+    --question-text: #6b454f;
+    --question-subtext: #9b7a82;
+
+    position: relative;
+
+    width: 100%;
+    min-height: 100svh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        48px
+        clamp(28px, 5vw, 72px);
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    color:
+        var(--question-text);
+}
+
+.container {
+    position: relative;
+
+    z-index: 2;
+
+    width: min(
+        1200px,
+        100%
+    );
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(300px, 0.75fr)
+        minmax(520px, 1.25fr);
+
+    align-items: center;
+
+    gap:
+        clamp(
+            48px,
+            7vw,
+            96px
+        );
+}
+
+.questionArea {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+    perspective: 1200px;
+}
+
+/*
+ * CARD SHELL
+ */
+
+.questionCard {
+    position: relative;
+
+    width: min(
+        620px,
+        100%
+    );
+
+    min-height: 420px;
+
+    box-sizing: border-box;
+
+    padding:
+        34px
+        36px
+        28px;
+
+    display: flex;
+    flex-direction: column;
+
+    border:
+        1px solid
+        rgba(
+            238,
+            165,
+            185,
+            0.35
+        );
+
+    border-radius: 24px;
+
+    background:
+        rgba(
+            255,
+            250,
+            247,
+            0.88
+        );
+
+    box-shadow:
+        0 22px 55px
+            rgba(
+                118,
+                75,
+                87,
+                0.08
+            ),
+        0 5px 14px
+            rgba(
+                118,
+                75,
+                87,
+                0.04
+            );
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+
+    animation:
+        cardEntrance
+        600ms
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        )
+        both;
+}
+
+/*
+ * Stack paper
+ */
+
+.questionCard::before,
+.questionCard::after {
+    content: '';
+
+    position: absolute;
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    border-radius: 24px;
+}
+
+.questionCard::before {
+    inset:
+        8px
+        -7px
+        -7px
+        8px;
+
+    border:
+        1px solid
+        rgba(
+            245,
+            138,
+            170,
+            0.13
+        );
+
+    background:
+        rgba(
+            255,
+            234,
+            240,
+            0.72
+        );
+
+    transform:
+        rotate(1.8deg);
+}
+
+.questionCard::after {
+    inset:
+        4px
+        5px
+        -5px
+        -6px;
+
+    border:
+        1px solid
+        rgba(
+            169,
+            155,
+            227,
+            0.1
+        );
+
+    background:
+        rgba(
+            255,
+            249,
+            244,
+            0.72
+        );
+
+    transform:
+        rotate(-1deg);
+}
+
+/*
+ * =========================================================
+ * QUESTION TRANSITION
+ * =========================================================
+ */
+
+.leaveNext {
+    animation:
+        leaveNext
+        220ms
+        ease
+        forwards;
+}
+
+.enterNext {
+    animation:
+        enterNext
+        380ms
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        )
+        forwards;
+}
+
+.leaveBack {
+    animation:
+        leaveBack
+        220ms
+        ease
+        forwards;
+}
+
+.enterBack {
+    animation:
+        enterBack
+        380ms
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        )
+        forwards;
+}
+
+@keyframes cardEntrance {
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+@keyframes leaveNext {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+
+@keyframes enterNext {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes leaveBack {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+}
+
+@keyframes enterBack {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/*
+ * =========================================================
+ * TABLET
+ * =========================================================
+ */
+
+@media (
+    min-width: 577px
+) and (max-width: 1023px) {
+    .wrapper {
+        padding:
+            34px
+            24px;
+
+        overflow-y: auto;
+    }
+
+    .container {
+        grid-template-columns:
+            minmax(0, 1fr);
+
+        justify-items: center;
+
+        gap: 30px;
+    }
+
+    .questionArea {
+        width:
+            min(
+                620px,
+                90vw
+            );
+    }
+
+    .questionCard {
+        width: 100%;
+
+        min-height: 400px;
+    }
+}
+
+/*
+ * =========================================================
+ * MOBILE
+ * =========================================================
+ */
+
+@media (max-width: 576px) {
+    .wrapper {
+        min-height: 100svh;
+
+        align-items:
+            flex-start;
+
+        padding:
+            26px
+            16px
+            34px;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .container {
+        width: 100%;
+
+        grid-template-columns:
+            minmax(0, 1fr);
+
+        gap: 20px;
+    }
+
+    .questionArea {
+        width: 100%;
+    }
+
+    .questionCard {
+        width: 100%;
+
+        min-height: 0;
+
+        padding:
+            22px
+            16px
+            20px;
+
+        border-radius: 20px;
+    }
+
+    .questionCard::before,
+    .questionCard::after {
+        border-radius: 20px;
+    }
+
+    .questionCard::before {
+        inset:
+            5px
+            -3px
+            -4px
+            4px;
+
+        transform:
+            rotate(0.8deg);
+    }
+
+    .questionCard::after {
+        inset:
+            3px
+            3px
+            -3px
+            -3px;
+
+        transform:
+            rotate(-0.5deg);
+    }
+}
+
+@media (
+    prefers-reduced-motion:
+        reduce
+) {
+    .questionCard,
+    .leaveNext,
+    .enterNext,
+    .leaveBack,
+    .enterBack {
+        animation: none;
+    }
+}

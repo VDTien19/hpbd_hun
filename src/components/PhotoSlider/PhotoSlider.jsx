@@ -1,55 +1,19 @@
-import {
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import styles from './PhotoSlider.module.scss';
 
 const AUTO_FLIP_DELAY = 5000;
 
-function PhotoSlider({
-    images = [],
-    coverImage,
-    backgroundImage,
-}) {
+function PhotoSlider({ images = [], coverImage, backgroundImage }) {
     /*
      * closed
      * opening
      * open
      * closing
      */
-    const [bookState, setBookState] =
-        useState('closed');
-
-    /*
-     * currentPage = ảnh đang nằm bên phải.
-     *
-     * 0:
-     * [cover back] [image 1]
-     *
-     * 1:
-     * [image 1] [image 2]
-     *
-     * 2:
-     * [image 2] [image 3]
-     */
-    const [currentPage, setCurrentPage] =
-        useState(0);
-
-    /*
-     * null
-     *
-     * hoặc:
-     *
-     * {
-     *   index: number,
-     *   direction: 'next' | 'prev'
-     * }
-     */
-    const [turning, setTurning] =
-        useState(null);
+    const [bookState, setBookState] = useState('closed');
+    const [currentPage, setCurrentPage] = useState(0);
+    const [turning, setTurning] = useState(null);
 
     const autoTimerRef = useRef(null);
 
@@ -59,28 +23,19 @@ function PhotoSlider({
      * =====================================================
      */
 
-    const clearAutoTimer =
-        useCallback(() => {
-            if (!autoTimerRef.current) {
-                return;
-            }
+    const clearAutoTimer = useCallback(() => {
+        if (!autoTimerRef.current) {
+            return;
+        }
 
-            clearTimeout(
-                autoTimerRef.current,
-            );
+        clearTimeout(autoTimerRef.current);
 
-            autoTimerRef.current = null;
-        }, []);
+        autoTimerRef.current = null;
+    }, []);
 
-    const isAnimating =
-        bookState === 'opening' ||
-        bookState === 'closing' ||
-        turning !== null;
+    const isAnimating = bookState === 'opening' || bookState === 'closing' || turning !== null;
 
-    const isLastPage =
-        images.length === 0 ||
-        currentPage >=
-            images.length - 1;
+    const isLastPage = images.length === 0 || currentPage >= images.length - 1;
 
     /*
      * =====================================================
@@ -89,10 +44,7 @@ function PhotoSlider({
      */
 
     const openBook = useCallback(() => {
-        if (
-            bookState !== 'closed' ||
-            images.length === 0
-        ) {
+        if (bookState !== 'closed' || images.length === 0) {
             return;
         }
 
@@ -101,11 +53,7 @@ function PhotoSlider({
         setCurrentPage(0);
         setTurning(null);
         setBookState('opening');
-    }, [
-        bookState,
-        images.length,
-        clearAutoTimer,
-    ]);
+    }, [bookState, images.length, clearAutoTimer]);
 
     /*
      * =====================================================
@@ -114,23 +62,14 @@ function PhotoSlider({
      */
 
     const closeBook = useCallback(() => {
-        if (
-            bookState !== 'open' ||
-            currentPage !== 0 ||
-            turning !== null
-        ) {
+        if (bookState !== 'open' || currentPage !== 0 || turning !== null) {
             return;
         }
 
         clearAutoTimer();
 
         setBookState('closing');
-    }, [
-        bookState,
-        currentPage,
-        turning,
-        clearAutoTimer,
-    ]);
+    }, [bookState, currentPage, turning, clearAutoTimer]);
 
     /*
      * =====================================================
@@ -138,42 +77,29 @@ function PhotoSlider({
      * =====================================================
      */
 
-    const handleCoverTransitionEnd =
-        useCallback(
-            (event) => {
-                if (
-                    event.target !==
-                    event.currentTarget
-                ) {
-                    return;
-                }
+    const handleCoverTransitionEnd = useCallback(
+        (event) => {
+            if (event.target !== event.currentTarget) {
+                return;
+            }
 
-                if (
-                    event.propertyName !==
-                    'transform'
-                ) {
-                    return;
-                }
+            if (event.propertyName !== 'transform') {
+                return;
+            }
 
-                if (
-                    bookState ===
-                    'opening'
-                ) {
-                    setBookState('open');
-                    return;
-                }
+            if (bookState === 'opening') {
+                setBookState('open');
+                return;
+            }
 
-                if (
-                    bookState ===
-                    'closing'
-                ) {
-                    setCurrentPage(0);
-                    setTurning(null);
-                    setBookState('closed');
-                }
-            },
-            [bookState],
-        );
+            if (bookState === 'closing') {
+                setCurrentPage(0);
+                setTurning(null);
+                setBookState('closed');
+            }
+        },
+        [bookState],
+    );
 
     /*
      * =====================================================
@@ -182,12 +108,7 @@ function PhotoSlider({
      */
 
     const nextPage = useCallback(() => {
-        if (
-            bookState !== 'open' ||
-            turning !== null ||
-            currentPage >=
-                images.length - 1
-        ) {
+        if (bookState !== 'open' || turning !== null || currentPage >= images.length - 1) {
             return;
         }
 
@@ -222,16 +143,8 @@ function PhotoSlider({
          * Không thay image.
          * Không remount sheet.
          */
-        setCurrentPage(
-            (prev) => prev + 1,
-        );
-    }, [
-        bookState,
-        turning,
-        currentPage,
-        images.length,
-        clearAutoTimer,
-    ]);
+        setCurrentPage((prev) => prev + 1);
+    }, [bookState, turning, currentPage, images.length, clearAutoTimer]);
 
     /*
      * =====================================================
@@ -239,61 +152,48 @@ function PhotoSlider({
      * =====================================================
      */
 
-    const previousPage =
-        useCallback(() => {
-            if (
-                bookState !== 'open' ||
-                turning !== null
-            ) {
-                return;
-            }
+    const previousPage = useCallback(() => {
+        if (bookState !== 'open' || turning !== null) {
+            return;
+        }
 
-            clearAutoTimer();
+        clearAutoTimer();
 
-            /*
-             * Spread đầu:
-             *
-             * [cover back] [image 1]
-             *
-             * click trái => đóng sách.
-             */
-            if (currentPage === 0) {
-                closeBook();
-                return;
-            }
+        /*
+         * Spread đầu:
+         *
+         * [cover back] [image 1]
+         *
+         * click trái => đóng sách.
+         */
+        if (currentPage === 0) {
+            closeBook();
+            return;
+        }
 
-            /*
-             * QUAN TRỌNG:
-             *
-             * Không tạo image mới bên phải.
-             *
-             * Chính sheet đang ở bên trái:
-             *
-             * rotateY(-180deg)
-             *
-             * sẽ quay ngược:
-             *
-             * rotateY(0deg)
-             */
+        /*
+         * QUAN TRỌNG:
+         *
+         * Không tạo image mới bên phải.
+         *
+         * Chính sheet đang ở bên trái:
+         *
+         * rotateY(-180deg)
+         *
+         * sẽ quay ngược:
+         *
+         * rotateY(0deg)
+         */
 
-            const sheetIndex =
-                currentPage - 1;
+        const sheetIndex = currentPage - 1;
 
-            setTurning({
-                index: sheetIndex,
-                direction: 'prev',
-            });
+        setTurning({
+            index: sheetIndex,
+            direction: 'prev',
+        });
 
-            setCurrentPage(
-                (prev) => prev - 1,
-            );
-        }, [
-            bookState,
-            turning,
-            currentPage,
-            clearAutoTimer,
-            closeBook,
-        ]);
+        setCurrentPage((prev) => prev - 1);
+    }, [bookState, turning, currentPage, clearAutoTimer, closeBook]);
 
     /*
      * =====================================================
@@ -301,41 +201,31 @@ function PhotoSlider({
      * =====================================================
      */
 
-    const handleSheetTransitionEnd =
-        useCallback(
-            (index, event) => {
-                if (
-                    event.target !==
-                    event.currentTarget
-                ) {
-                    return;
-                }
+    const handleSheetTransitionEnd = useCallback(
+        (index, event) => {
+            if (event.target !== event.currentTarget) {
+                return;
+            }
 
-                if (
-                    event.propertyName !==
-                    'transform'
-                ) {
-                    return;
-                }
+            if (event.propertyName !== 'transform') {
+                return;
+            }
 
-                if (
-                    !turning ||
-                    turning.index !== index
-                ) {
-                    return;
-                }
+            if (!turning || turning.index !== index) {
+                return;
+            }
 
-                /*
-                 * Không commit image.
-                 * Không swap page.
-                 *
-                 * Chỉ kết thúc trạng thái
-                 * animation.
-                 */
-                setTurning(null);
-            },
-            [turning],
-        );
+            /*
+             * Không commit image.
+             * Không swap page.
+             *
+             * Chỉ kết thúc trạng thái
+             * animation.
+             */
+            setTurning(null);
+        },
+        [turning],
+    );
 
     /*
      * =====================================================
@@ -346,28 +236,16 @@ function PhotoSlider({
     useEffect(() => {
         clearAutoTimer();
 
-        if (
-            bookState !== 'open' ||
-            turning !== null ||
-            isLastPage
-        ) {
+        if (bookState !== 'open' || turning !== null || isLastPage) {
             return;
         }
 
-        autoTimerRef.current =
-            setTimeout(() => {
-                nextPage();
-            }, AUTO_FLIP_DELAY);
+        autoTimerRef.current = setTimeout(() => {
+            nextPage();
+        }, AUTO_FLIP_DELAY);
 
         return clearAutoTimer;
-    }, [
-        bookState,
-        currentPage,
-        turning,
-        isLastPage,
-        nextPage,
-        clearAutoTimer,
-    ]);
+    }, [bookState, currentPage, turning, isLastPage, nextPage, clearAutoTimer]);
 
     useEffect(() => {
         return () => {
@@ -381,19 +259,14 @@ function PhotoSlider({
      * =====================================================
      */
 
-    const handleBookClick = (
-        event,
-    ) => {
+    const handleBookClick = (event) => {
         if (isAnimating) {
             return;
         }
 
-        const rect =
-            event.currentTarget.getBoundingClientRect();
+        const rect = event.currentTarget.getBoundingClientRect();
 
-        const x =
-            event.clientX -
-            rect.left;
+        const x = event.clientX - rect.left;
 
         /*
          * CLOSED
@@ -404,9 +277,7 @@ function PhotoSlider({
          * chính giữa wrapper.
          */
         if (bookState === 'closed') {
-            if (
-                x >= rect.width / 2
-            ) {
+            if (x >= rect.width / 2) {
                 openBook();
             }
 
@@ -439,16 +310,12 @@ function PhotoSlider({
      * =====================================================
      */
 
-    const getSheetZIndex = (
-        index,
-    ) => {
+    const getSheetZIndex = (index) => {
         /*
          * Sheet đang quay phải nằm
          * trên tất cả sheet khác.
          */
-        if (
-            turning?.index === index
-        ) {
+        if (turning?.index === index) {
             return 5000;
         }
 
@@ -489,21 +356,13 @@ function PhotoSlider({
     const bookClasses = [
         styles.book,
 
-        bookState === 'closed'
-            ? styles.closed
-            : '',
+        bookState === 'closed' ? styles.closed : '',
 
-        bookState === 'opening'
-            ? styles.opening
-            : '',
+        bookState === 'opening' ? styles.opening : '',
 
-        bookState === 'open'
-            ? styles.open
-            : '',
+        bookState === 'open' ? styles.open : '',
 
-        bookState === 'closing'
-            ? styles.closing
-            : '',
+        bookState === 'closing' ? styles.closing : '',
     ]
         .filter(Boolean)
         .join(' ');
@@ -518,19 +377,8 @@ function PhotoSlider({
              * Fake spine KHÔNG nằm trong đây.
              */}
 
-            <div
-                className={
-                    styles.perspectiveLayer
-                }
-            >
-                <div
-                    className={
-                        bookClasses
-                    }
-                    onClick={
-                        handleBookClick
-                    }
-                >
+            <div className={styles.perspectiveLayer}>
+                <div className={bookClasses} onClick={handleBookClick}>
                     {/*
                      * =====================================
                      * COVER
@@ -541,33 +389,12 @@ function PhotoSlider({
                      * Không mount/unmount mỗi lần mở.
                      */}
 
-                    <div
-                        className={
-                            styles.coverSheet
-                        }
-                        onTransitionEnd={
-                            handleCoverTransitionEnd
-                        }
-                    >
-                        <div
-                            className={[
-                                styles.frontFace,
-                                styles.coverFrontFace,
-                            ].join(' ')}
-                        >
-                            <CoverPage
-                                image={
-                                    coverImage
-                                }
-                            />
+                    <div className={styles.coverSheet} onTransitionEnd={handleCoverTransitionEnd}>
+                        <div className={[styles.frontFace, styles.coverFrontFace].join(' ')}>
+                            <CoverPage image={coverImage} />
                         </div>
 
-                        <div
-                            className={[
-                                styles.backFace,
-                                styles.coverBackFace,
-                            ].join(' ')}
-                        >
+                        <div className={[styles.backFace, styles.coverBackFace].join(' ')}>
                             <CoverBack />
                         </div>
                     </div>
@@ -578,111 +405,53 @@ function PhotoSlider({
                      * =====================================
                      */}
 
-                    {images.map(
-                        (
-                            image,
-                            index,
-                        ) => {
-                            const isFlipped =
-                                index <
-                                currentPage;
+                    {images.map((image, index) => {
+                        const isFlipped = index < currentPage;
 
-                            const isTurning =
-                                turning
-                                    ?.index ===
-                                index;
+                        const isTurning = turning?.index === index;
 
-                            return (
-                                <div
-                                    key={
-                                        index
-                                    }
-                                    className={[
-                                        styles.photoSheet,
+                        return (
+                            <div
+                                key={index}
+                                className={[
+                                    styles.photoSheet,
 
-                                        isFlipped
-                                            ? styles.flipped
-                                            : '',
+                                    isFlipped ? styles.flipped : '',
 
-                                        isTurning
-                                            ? styles.turning
-                                            : '',
-                                    ]
-                                        .filter(
-                                            Boolean,
-                                        )
-                                        .join(
-                                            ' ',
-                                        )}
-                                    style={{
-                                        zIndex:
-                                            getSheetZIndex(
-                                                index,
-                                            ),
-                                    }}
-                                    onTransitionEnd={(
-                                        event,
-                                    ) =>
-                                        handleSheetTransitionEnd(
-                                            index,
-                                            event,
-                                        )
-                                    }
-                                >
-                                    {/*
-                                     * RIGHT FACE
-                                     */}
+                                    isTurning ? styles.turning : '',
+                                ]
+                                    .filter(Boolean)
+                                    .join(' ')}
+                                style={{
+                                    zIndex: getSheetZIndex(index),
+                                }}
+                                onTransitionEnd={(event) => handleSheetTransitionEnd(index, event)}
+                            >
+                                {/*
+                                 * RIGHT FACE
+                                 */}
 
-                                    <div
-                                        className={[
-                                            styles.frontFace,
-                                            styles.photoFrontFace,
-                                        ].join(
-                                            ' ',
-                                        )}
-                                    >
-                                        <PhotoPage
-                                            image={
-                                                image
-                                            }
-                                            backgroundImage={
-                                                backgroundImage
-                                            }
-                                        />
-                                    </div>
-
-                                    {/*
-                                     * LEFT FACE
-                                     *
-                                     * Vẫn cùng image.
-                                     *
-                                     * Đây là chủ đích:
-                                     * page đang ở RIGHT khi
-                                     * lật sang LEFT phải vẫn
-                                     * là cùng một trang.
-                                     */}
-
-                                    <div
-                                        className={[
-                                            styles.backFace,
-                                            styles.photoBackFace,
-                                        ].join(
-                                            ' ',
-                                        )}
-                                    >
-                                        <PhotoPage
-                                            image={
-                                                image
-                                            }
-                                            backgroundImage={
-                                                backgroundImage
-                                            }
-                                        />
-                                    </div>
+                                <div className={[styles.frontFace, styles.photoFrontFace].join(' ')}>
+                                    <PhotoPage image={image} backgroundImage={backgroundImage} />
                                 </div>
-                            );
-                        },
-                    )}
+
+                                {/*
+                                 * LEFT FACE
+                                 *
+                                 * Vẫn cùng image.
+                                 *
+                                 * Đây là chủ đích:
+                                 * page đang ở RIGHT khi
+                                 * lật sang LEFT phải vẫn
+                                 * là cùng một trang.
+                                 */}
+
+                                <div className={[styles.backFace, styles.photoBackFace].join(' ')}>
+                                    <PhotoPage image={image} backgroundImage={backgroundImage} />
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -703,14 +472,7 @@ function PhotoSlider({
              * => không tham gia 3D compositor.
              */}
 
-            {bookState === 'open' && (
-                <div
-                    className={
-                        styles.fakeSpine
-                    }
-                    aria-hidden="true"
-                />
-            )}
+            {bookState === 'open' && <div className={styles.fakeSpine} aria-hidden="true" />}
         </div>
     );
 }
@@ -723,16 +485,8 @@ function PhotoSlider({
 
 function CoverPage({ image }) {
     return (
-        <div
-            className={
-                styles.coverPage
-            }
-        >
-            <img
-                src={image}
-                alt="Birthday album cover"
-                draggable={false}
-            />
+        <div className={styles.coverPage}>
+            <img src={image} alt="Birthday album cover" draggable={false} />
         </div>
     );
 }
@@ -744,13 +498,7 @@ function CoverPage({ image }) {
  */
 
 function CoverBack() {
-    return (
-        <div
-            className={
-                styles.coverBack
-            }
-        />
-    );
+    return <div className={styles.coverBack} />;
 }
 
 /*
@@ -759,56 +507,19 @@ function CoverBack() {
  * =========================================================
  */
 
-function PhotoPage({
-    image,
-    backgroundImage,
-}) {
+function PhotoPage({ image, backgroundImage }) {
     if (!image) {
-        return (
-            <div
-                className={
-                    styles.emptyPage
-                }
-            />
-        );
+        return <div className={styles.emptyPage} />;
     }
 
     return (
-        <div
-            className={
-                styles.photoPage
-            }
-        >
+        <div className={styles.photoPage}>
             {backgroundImage && (
-                <img
-                    src={
-                        backgroundImage
-                    }
-                    className={
-                        styles.pageBackground
-                    }
-                    alt=""
-                    draggable={
-                        false
-                    }
-                />
+                <img src={backgroundImage} className={styles.pageBackground} alt="" draggable={false} />
             )}
 
-            <div
-                className={
-                    styles.photoContainer
-                }
-            >
-                <img
-                    src={image}
-                    className={
-                        styles.photo
-                    }
-                    alt=""
-                    draggable={
-                        false
-                    }
-                />
+            <div className={styles.photoContainer}>
+                <img src={image} className={styles.photo} alt="" draggable={false} />
             </div>
         </div>
     );
