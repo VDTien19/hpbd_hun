@@ -1,0 +1,201 @@
+.wrapper {
+    position: relative;
+
+    max-width: 390px;
+}
+
+.eyebrow {
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    color:
+        var(--question-pink);
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+}
+
+.title {
+    margin:
+        0
+        0
+        18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    color:
+        var(--question-text);
+
+    font-family:
+        'Baloo 2',
+        cursive;
+
+    font-size:
+        clamp(
+            52px,
+            5vw,
+            76px
+        );
+
+    font-weight: 700;
+
+    line-height: 0.95;
+
+    letter-spacing:
+        -0.035em;
+}
+
+.title span {
+    color:
+        var(--question-pink);
+
+    font-size: 0.7em;
+}
+
+.subtitle {
+    margin:
+        0
+        0
+        18px;
+
+    color:
+        var(--question-text);
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size:
+        clamp(
+            18px,
+            1.7vw,
+            22px
+        );
+
+    font-weight: 700;
+
+    line-height: 1.55;
+}
+
+.description {
+    max-width: 350px;
+
+    margin: 0;
+
+    color:
+        var(--question-subtext);
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size: 15px;
+
+    line-height: 1.75;
+}
+
+.decoration {
+    margin-top: 38px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    color:
+        var(--question-pink);
+
+    opacity: 0.4;
+
+    font-size: 24px;
+}
+
+.decoration span:nth-child(2) {
+    color: #a99be3;
+}
+
+@media (
+    min-width: 577px
+) and (max-width: 1023px) {
+    .wrapper {
+        width:
+            min(
+                620px,
+                90vw
+            );
+
+        max-width: none;
+
+        text-align: center;
+    }
+
+    .eyebrow {
+        margin-bottom: 5px;
+    }
+
+    .title {
+        justify-content:
+            center;
+
+        margin-bottom: 10px;
+
+        font-size: 50px;
+    }
+
+    .subtitle {
+        margin-bottom: 0;
+
+        font-size: 18px;
+    }
+
+    .description,
+    .decoration {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .wrapper {
+        max-width: none;
+
+        text-align: center;
+    }
+
+    .eyebrow {
+        margin-bottom: 3px;
+
+        font-size: 12px;
+    }
+
+    .title {
+        justify-content:
+            center;
+
+        margin-bottom: 9px;
+
+        font-size: 42px;
+    }
+
+    .subtitle {
+        margin: 0;
+
+        font-size: 15px;
+
+        line-height: 1.45;
+    }
+
+    .description,
+    .decoration {
+        display: none;
+    }
+}

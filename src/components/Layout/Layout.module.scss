@@ -10,10 +10,15 @@
     inset: 0;
     z-index: 0;
 
-    background-image: url('@/assets/images/background.png');
-    background-size: cover;
-    // background-position: center;
-    background-repeat: no-repeat;
+    // background-image: url('@/assets/images/background.png');
+    // background-size: cover;
+    // background-repeat: no-repeat;
+
+    background:
+        radial-gradient(circle at 15% 20%, #ffdce8 0, transparent 25%),
+        radial-gradient(circle at 85% 15%, #dcecff 0, transparent 25%),
+        radial-gradient(circle at 80% 85%, #ffe8ca 0, transparent 25%),
+        #fffafb;
 
     // background: radial-gradient(
     //     circle at top,
@@ -22,14 +27,179 @@
     // );
 }
 
-@media (max-width: 576px) {
-    .background {
-        background-image: url('@/assets/images/background_mobile.png');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+.decor {
+    position: absolute;
+    line-height: 1;
+
+    opacity: 1 !important;
+    user-select: none;
+    pointer-events: none;
+
+    animation: floating 7s ease-in-out infinite;
+}
+
+/* ♡ */
+
+.heart1 {
+    top: 12%;
+    left: 7%;
+    font-size: 42px;
+    color: #e88ba7;
+}
+
+.heart2 {
+    top: 58%;
+    right: 6%;
+    font-size: 55px;
+    color: #ef9bb5;
+    animation-delay: -3s;
+}
+
+.heart3 {
+    bottom: 8%;
+    left: 32%;
+    font-size: 32px;
+    color: #e998ae;
+    animation-delay: -5s;
+}
+
+/* ✦ */
+
+.sparkle1 {
+    top: 9%;
+    right: 15%;
+    font-size: 32px;
+    color: #d4a74f;
+    animation-delay: -2s;
+}
+
+.sparkle2 {
+    top: 43%;
+    left: 3%;
+    font-size: 25px;
+    color: #e8b75f;
+    animation-delay: -4s;
+}
+
+.sparkle3 {
+    bottom: 14%;
+    right: 24%;
+    font-size: 38px;
+    color: #a8bfe8;
+    animation-delay: -1s;
+}
+
+/* ✧ */
+
+.star1 {
+    top: 27%;
+    right: 4%;
+    font-size: 29px;
+    color: #a8bfe8;
+    animation-delay: -4s;
+}
+
+.star2 {
+    bottom: 27%;
+    left: 12%;
+    font-size: 36px;
+    color: #e8b75f;
+    animation-delay: -2s;
+}
+
+.star3 {
+    bottom: 5%;
+    right: 7%;
+    font-size: 24px;
+    color: #e8b75f;
+    animation-delay: -6s;
+}
+
+/* ☾ */
+
+.moon1 {
+    top: 22%;
+    left: 20%;
+    font-size: 34px;
+    color: #c5a7df;
+    animation-delay: -1s;
+}
+
+.moon2 {
+    top: 69%;
+    right: 16%;
+    font-size: 42px;
+    color: #c5a7df;
+    animation-delay: -5s;
+}
+
+.moon3 {
+    bottom: 4%;
+    left: 6%;
+    font-size: 27px;
+    color: #d9b9e8;
+    animation-delay: -3s;
+}
+
+/* ❀ */
+
+.flower1 {
+    top: 6%;
+    left: 46%;
+    font-size: 27px;
+    color: #ee9eb5;
+    animation-delay: -4s;
+}
+
+.flower2 {
+    top: 72%;
+    left: 4%;
+    font-size: 34px;
+    color: #ee9eb5;
+    animation-delay: -2s;
+}
+
+.flower3 {
+    top: 38%;
+    right: 20%;
+    font-size: 24px;
+    color: #e7a6bb;
+    animation-delay: -6s;
+}
+
+.heart2,
+.sparkle3,
+.moon1 {
+    animation-duration: 9s;
+}
+
+.star1,
+.flower2,
+.heart3 {
+    animation-duration: 11s;
+}
+
+@keyframes floating {
+    0%,
+    100% {
+        transform: translateY(0) rotate(-3deg);
+        opacity: 0.07 !important;
+    }
+
+    50% {
+        transform: translateY(-12px) rotate(3deg);
+        opacity: 0.15 !important;
     }
 }
+
+// @media (max-width: 576px) {
+//     .background {
+//         background-image: url('@/assets/images/background_mobile.png');
+//         background-size: cover;
+//         background-position: center;
+//         background-repeat: no-repeat;
+//     }
+// }
 
 .hearts {
     position: absolute;

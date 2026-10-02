@@ -1,0 +1,59 @@
+.wrapper {
+    margin-bottom: 18px;
+
+    display: flex;
+    justify-content: center;
+
+    gap: 7px;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+
+    display: block;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(
+            245,
+            138,
+            170,
+            0.5
+        );
+
+    border-radius: 999px;
+
+    background: transparent;
+
+    transition:
+        width 250ms ease,
+        background 250ms ease;
+}
+
+.active {
+    width: 20px;
+
+    border-color:
+        var(--question-pink);
+
+    background:
+        var(--question-pink);
+}
+
+@media (max-width: 576px) {
+    .wrapper {
+        margin-bottom: 14px;
+    }
+}
+
+@media (
+    prefers-reduced-motion:
+        reduce
+) {
+    .dot {
+        transition: none;
+    }
+}
