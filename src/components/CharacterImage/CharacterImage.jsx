@@ -1,5 +1,5 @@
 import styles from './CharacterImage.module.scss';
-import { normalImage, incorrectPassImage, vuongsonhienImg, goyounjungImg } from "@/assets/images";
+import { normalImage, incorrectPassImage } from "@/assets/images";
 
 
 function CharacterImage({ status }) {
