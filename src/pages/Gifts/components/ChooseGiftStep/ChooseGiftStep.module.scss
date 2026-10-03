@@ -1,0 +1,175 @@
+.wrapper {
+    width: 100%;
+
+    animation:
+        enter
+        500ms
+        ease
+        both;
+}
+
+.heading {
+    max-width: 720px;
+
+    margin:
+        0
+        auto
+        34px;
+
+    text-align: center;
+}
+
+.eyebrow {
+    color:
+        var(--text-accent);
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    letter-spacing: 0.1em;
+}
+
+.heading h1 {
+    margin:
+        7px
+        0
+        14px;
+
+    color:
+        var(--text-heading);
+
+    font-family:
+        'Baloo 2',
+        cursive;
+
+    font-size:
+        clamp(
+            38px,
+            4vw,
+            56px
+        );
+
+    line-height: 1.1;
+}
+
+.intro,
+.chooseText,
+.note {
+    font-family:
+        'Nunito',
+        sans-serif;
+}
+
+.intro {
+    margin: 0;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    line-height: 1.6;
+}
+
+.secondary {
+    color:
+        var(--text-muted);
+}
+
+.chooseText {
+    margin:
+        18px
+        0
+        0;
+
+    color:
+        var(--text-accent);
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.gifts {
+    width:
+        min(
+            1040px,
+            100%
+        );
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        clamp(
+            18px,
+            3vw,
+            34px
+        );
+}
+
+.note {
+    margin-top: 22px;
+
+    color:
+        var(--text-muted);
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+@keyframes enter {
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+@media (max-width: 576px) {
+    .heading {
+        margin-bottom: 20px;
+    }
+
+    .heading h1 {
+        font-size: 34px;
+    }
+
+    .intro {
+        font-size: 14px;
+    }
+
+    .secondary {
+        display: none;
+    }
+
+    .chooseText {
+        margin-top: 12px;
+
+        font-size: 14px;
+    }
+
+    .gifts {
+        grid-template-columns:
+            1fr;
+
+        gap: 11px;
+    }
+}
