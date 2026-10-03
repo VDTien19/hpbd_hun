@@ -1,7 +1,5 @@
 export { default as incorrectPassImage } from './incorrectPass.png';
 export { default as normalImage } from './normalImage.jpg';
-export { default as goyounjungImg } from './goyounjung.jpg';
-export { default as vuongsonhienImg } from './vuongsonhien.jpg'
 
 export { default as image1 } from './image-1.jpg';
 export { default as image2 } from './image-2.jpg';
@@ -25,12 +23,13 @@ export { default as image19 } from './image-19.jpg';
 export { default as image20 } from './image-20.jpg';
 export { default as image21 } from './image-21.jpg';
 export { default as image22 } from './image-22.jpg';
+export { default as image23 } from './image-23.jpg';
+export { default as image24 } from './image-24.jpg';
+export { default as image25 } from './image-25.jpg';
+export { default as image26 } from './image-26.jpg';
+export { default as image27 } from './image-27.jpg';
+
+
 export { default as coverImage } from './coverImage.png';
 export { default as backgroundImage } from './background-1.png';
 export { default as backgroundImage2 } from './background-2.png';
-
-export { default as imagetest1 } from './imagetest1.jpg';
-export { default as imagetest2 } from './imagetest2.jpg';
-export { default as imagetest3 } from './imagetest3.jpg';
-export { default as imagetest4 } from './imagetest4.jpg';
-export { default as imagetest5 } from './imagetest5.jpg';
