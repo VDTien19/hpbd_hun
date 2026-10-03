@@ -1,0 +1,101 @@
+.wrapper {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    font-family:
+        'Nunito',
+        sans-serif;
+}
+
+.wrapper span {
+    position: absolute;
+
+    color:
+        var(--pink);
+
+    opacity: 0.11;
+
+    animation:
+        floating
+        9s
+        ease-in-out
+        infinite;
+}
+
+.one {
+    top: 9%;
+    left: 5%;
+
+    font-size: 42px;
+}
+
+.two {
+    top: 13%;
+    right: 7%;
+
+    font-size: 28px;
+}
+
+.three {
+    left: 7%;
+    bottom: 10%;
+
+    font-size: 32px;
+}
+
+.four {
+    right: 5%;
+    bottom: 9%;
+
+    font-size: 42px;
+}
+
+.five {
+    top: 46%;
+    right: 2%;
+
+    font-size: 23px;
+}
+
+@keyframes floating {
+    0%,
+    100% {
+        transform:
+            translateY(0)
+            rotate(-2deg);
+    }
+
+    50% {
+        transform:
+            translateY(-9px)
+            rotate(3deg);
+    }
+}
+
+@media (max-width: 576px) {
+    .wrapper span {
+        opacity: 0.08;
+
+        font-size: 20px;
+    }
+
+    .five {
+        display: none;
+    }
+}
+
+@media (
+    prefers-reduced-motion:
+        reduce
+) {
+    .wrapper span {
+        animation: none;
+    }
+}

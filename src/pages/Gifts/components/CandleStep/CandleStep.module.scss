@@ -1,0 +1,452 @@
+.wrapper {
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    text-align: center;
+
+    font-family: 'Nunito', sans-serif;
+
+    animation: enter 500ms ease;
+}
+
+.eyebrow {
+    color: var(--text-accent);
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.wrapper h1 {
+    margin: 7px 0 14px;
+
+    color: var(--text-heading);
+
+    font-family: 'Baloo 2', cursive;
+
+    font-size: clamp(38px, 4vw, 56px);
+}
+
+.message {
+    min-height: 58px;
+}
+
+.message p {
+    margin: 0;
+
+    color: var(--text-muted);
+
+    line-height: 1.65;
+}
+
+.message strong {
+    color: var(--text-primary);
+
+    font-size: 17px;
+}
+
+.secret {
+    padding-top: 12px;
+
+    color: var(--text-heading) !important;
+
+    font-weight: 700;
+
+    animation: secretIn 400ms ease;
+}
+
+.scene {
+    position: relative;
+
+    width: min(470px, 100%);
+
+    height: 285px;
+
+    margin: 4px auto 12px;
+}
+
+.cake {
+    position: absolute;
+
+    left: 50%;
+    bottom: 18px;
+
+    width: 230px;
+    height: 210px;
+
+    transform: translateX(-50%);
+}
+
+.candles {
+    position: absolute;
+
+    z-index: 5;
+
+    top: 4px;
+    left: 50%;
+
+    width: 150px;
+    height: 70px;
+
+    transform: translateX(-50%);
+
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.candle {
+    position: relative;
+
+    width: 10px;
+    height: 46px;
+
+    border-radius: 5px 5px 2px 2px;
+
+    background: repeating-linear-gradient(45deg, #ffdce8 0 6px, #f58aaa 6px 10px);
+}
+
+.candle:nth-child(2),
+.candle:nth-child(4) {
+    height: 39px;
+}
+
+.flame {
+    position: absolute;
+
+    top: -19px;
+    left: 50%;
+
+    width: 11px;
+    height: 18px;
+
+    transform:
+        translateX(-50%);
+
+    transform-origin:
+        50% 100%;
+
+    border-radius:
+        70% 40% 65% 40%;
+
+    background:
+        linear-gradient(
+            #fff1a8 0%,
+            #ffd781 38%,
+            #ff9d74 100%
+        );
+
+    box-shadow:
+        0 0 7px
+            rgba(
+                255,
+                216,
+                129,
+                0.65
+            ),
+        0 0 14px
+            rgba(
+                255,
+                157,
+                116,
+                0.32
+            );
+
+    animation:
+        flame
+        1.15s
+        ease-in-out
+        infinite;
+
+    transition:
+        opacity 300ms ease,
+        transform 300ms ease,
+        filter 300ms ease;
+}
+
+.flicker {
+    animation: strongFlicker 180ms infinite alternate;
+}
+
+.out {
+    opacity: 0;
+
+    animation: none;
+
+    transform: translateX(-50%) translateY(-3px) scale(0.3);
+}
+
+.smoke {
+    position: absolute;
+
+    top: -20px;
+    left: 50%;
+
+    width: 5px;
+    height: 17px;
+
+    border-radius: 50%;
+
+    background: rgba(122, 113, 117, 0.2);
+
+    filter: blur(2px);
+
+    animation: smoke 900ms ease-out forwards;
+}
+
+.cakeTop {
+    position: absolute;
+
+    z-index: 4;
+
+    top: 64px;
+    left: 20px;
+    right: 20px;
+
+    height: 44px;
+
+    border-radius: 50%;
+
+    background: #fff4ed;
+}
+
+.cakeBody {
+    position: absolute;
+
+    top: 84px;
+    left: 20px;
+    right: 20px;
+
+    height: 96px;
+
+    border-radius: 5px 5px 24px 24px;
+
+    background: linear-gradient(#ffe5ec, #ffd1df);
+}
+
+.cakeBody span {
+    position: absolute;
+
+    top: 26px;
+
+    width: 18px;
+    height: 28px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.53);
+}
+
+.cakeBody span:nth-child(1) {
+    left: 27px;
+}
+
+.cakeBody span:nth-child(2) {
+    left: 50%;
+
+    transform: translateX(-50%);
+}
+
+.cakeBody span:nth-child(3) {
+    right: 27px;
+}
+
+.plate {
+    position: absolute;
+
+    left: 4px;
+    right: 4px;
+    bottom: 12px;
+
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: var(--blue);
+}
+
+.button {
+    min-height: 46px;
+
+    padding: 11px 24px;
+
+    border: 0;
+
+    border-radius: 999px;
+
+    background: linear-gradient(135deg, #f58aaa, #ff9dbb);
+
+    color: #fff;
+
+    font-family: 'Nunito', sans-serif;
+
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.button:disabled {
+    cursor: default;
+
+    opacity: 0.9;
+}
+
+.blackOverlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    background: #000;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: opacity 650ms ease;
+}
+
+.black {
+    opacity: 1;
+}
+
+@keyframes enter {
+    from {
+        opacity: 0;
+
+        transform: translateY(8px);
+    }
+}
+
+@keyframes secretIn {
+    from {
+        opacity: 0;
+
+        transform: translateY(5px);
+    }
+}
+
+@keyframes flame {
+    0%,
+    100% {
+        transform:
+            translateX(-50%)
+            rotate(-4deg)
+            scale(
+                0.95,
+                1
+            );
+
+        filter:
+            brightness(1);
+    }
+
+    25% {
+        transform:
+            translateX(-50%)
+            rotate(3deg)
+            scale(
+                1.04,
+                0.92
+            );
+
+        filter:
+            brightness(1.08);
+    }
+
+    50% {
+        transform:
+            translateX(-50%)
+            rotate(-2deg)
+            scale(
+                0.92,
+                1.08
+            );
+
+        filter:
+            brightness(0.96);
+    }
+
+    75% {
+        transform:
+            translateX(-50%)
+            rotate(4deg)
+            scale(
+                1.03,
+                0.95
+            );
+
+        filter:
+            brightness(1.1);
+    }
+}
+
+@keyframes strongFlicker {
+    from {
+        transform: translateX(-50%) rotate(-8deg) scale(0.88, 1.08);
+    }
+
+    to {
+        transform: translateX(-50%) rotate(9deg) scale(1.08, 0.85);
+    }
+}
+
+@keyframes smoke {
+    from {
+        opacity: 0.3;
+
+        transform: translateX(-50%);
+    }
+
+    to {
+        opacity: 0;
+
+        transform: translateX(-50%) translateY(-24px) translateX(6px) scale(1.4);
+    }
+}
+
+@media (max-width: 576px) {
+    .wrapper h1 {
+        font-size: 34px;
+    }
+
+    .scene {
+        height: 245px;
+    }
+
+    .cake {
+        width: 195px;
+        height: 185px;
+    }
+
+    .candles {
+        width: 130px;
+
+        transform: translateX(-50%) scale(0.9);
+    }
+
+    .cakeTop {
+        top: 58px;
+    }
+
+    .cakeBody {
+        top: 76px;
+
+        height: 83px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wrapper,
+    // .flame,
+    // .flicker,
+    .smoke {
+        animation: none;
+    }
+
+    .blackOverlay {
+        transition-duration: 250ms;
+    }
+}

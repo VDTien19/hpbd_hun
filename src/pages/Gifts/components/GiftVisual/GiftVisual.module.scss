@@ -1,0 +1,384 @@
+.wrapper {
+    --size: 170px;
+
+    --gift-main: #ffd3df;
+    --gift-dark: #d97a99;
+    --gift-soft: #fff0f5;
+
+    --gift-border:
+        rgba(
+            217,
+            122,
+            153,
+            0.28
+        );
+
+    position: relative;
+
+    width:
+        var(--size);
+
+    height:
+        calc(
+            var(--size) *
+            0.9
+        );
+
+    margin:
+        12px
+        auto
+        18px;
+
+    animation:
+        floating
+        7.5s
+        ease-in-out
+        infinite;
+}
+
+.pink {
+    --gift-main: #ffd3df;
+    --gift-dark: #d97a99;
+    --gift-soft: #fff0f5;
+}
+
+.lavender {
+    --gift-main: #ded2f5;
+    --gift-dark: #9b85c6;
+    --gift-soft: #f5f0ff;
+
+    --gift-border:
+        rgba(
+            155,
+            133,
+            198,
+            0.27
+        );
+}
+
+.blue {
+    --gift-main: #cce8f7;
+    --gift-dark: #74a8c6;
+    --gift-soft: #eef8fd;
+
+    --gift-border:
+        rgba(
+            116,
+            168,
+            198,
+            0.28
+        );
+}
+
+.large {
+    --size: 235px;
+}
+
+.modal {
+    --size: 155px;
+
+    animation: none;
+}
+
+.reveal {
+    --size: 145px;
+}
+
+.shadow {
+    position: absolute;
+
+    left: 19%;
+    right: 19%;
+    bottom: 4%;
+
+    height: 12%;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            112,
+            76,
+            83,
+            0.11
+        );
+
+    filter:
+        blur(7px);
+}
+
+.body {
+    position: absolute;
+
+    left: 15%;
+    right: 15%;
+    bottom: 10%;
+
+    height: 54%;
+
+    border:
+        1px solid
+        var(--gift-border);
+
+    border-radius:
+        8px
+        8px
+        15px
+        15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--gift-soft),
+            var(--gift-main)
+        );
+}
+
+.lid {
+    position: absolute;
+
+    z-index: 3;
+
+    left: 10%;
+    right: 10%;
+    bottom: 59%;
+
+    height: 18%;
+
+    border:
+        1px solid
+        var(--gift-border);
+
+    border-radius: 11px;
+
+    background:
+        var(--gift-main);
+
+    box-shadow:
+        0 6px 10px
+        rgba(
+            112,
+            76,
+            83,
+            0.06
+        );
+
+    transition:
+        transform 300ms ease;
+}
+
+.ribbonVertical {
+    position: absolute;
+
+    z-index: 4;
+
+    left: 50%;
+    bottom: 10%;
+
+    width: 16%;
+    height: 67%;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        var(--gift-dark);
+
+    opacity: 0.55;
+}
+
+.ribbonHorizontal {
+    position: absolute;
+
+    z-index: 4;
+
+    left: 15%;
+    right: 15%;
+    bottom: 35%;
+
+    height: 10%;
+
+    background:
+        var(--gift-dark);
+
+    opacity: 0.5;
+}
+
+.bowLeft,
+.bowRight {
+    position: absolute;
+
+    z-index: 6;
+
+    top: 9%;
+
+    width: 29%;
+    height: 25%;
+
+    border:
+        2px solid
+        var(--gift-dark);
+
+    background:
+        var(--gift-soft);
+
+    opacity: 0.9;
+
+    transition:
+        transform 300ms ease;
+}
+
+.bowLeft {
+    left: 22%;
+
+    border-radius:
+        80% 30% 70% 30%;
+
+    transform:
+        rotate(21deg);
+}
+
+.bowRight {
+    right: 22%;
+
+    border-radius:
+        30% 80% 30% 70%;
+
+    transform:
+        rotate(-21deg);
+}
+
+.knot {
+    position: absolute;
+
+    z-index: 7;
+
+    top: 19%;
+    left: 50%;
+
+    width: 15%;
+
+    aspect-ratio: 1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    border-radius: 50%;
+
+    background:
+        var(--gift-dark);
+}
+
+.interactive .lid {
+    transform:
+        translateY(-2px)
+        rotate(-1.5deg);
+}
+
+.interactive .bowLeft {
+    transform:
+        rotate(25deg);
+}
+
+.interactive .bowRight {
+    transform:
+        rotate(-25deg);
+}
+
+.sparkleOne,
+.sparkleTwo {
+    position: absolute;
+
+    color:
+        var(--gift-dark);
+
+    opacity: 0.45;
+}
+
+.sparkleOne {
+    top: 15%;
+    right: 2%;
+
+    font-size: 17px;
+}
+
+.sparkleTwo {
+    top: 39%;
+    left: 4%;
+
+    font-size: 12px;
+}
+
+@keyframes floating {
+    0%,
+    100% {
+        transform:
+            translateY(0)
+            rotate(-0.4deg);
+    }
+
+    50% {
+        transform:
+            translateY(-7px)
+            rotate(0.8deg);
+    }
+}
+
+@media (max-width: 576px) {
+    .wrapper {
+        --size: 96px;
+
+        margin: 0;
+
+        animation: none;
+    }
+
+    .large {
+        --size: 185px;
+
+        margin:
+            0
+            auto;
+
+        animation:
+            floating
+            6s
+            ease-in-out
+            infinite;
+    }
+
+    .modal {
+        --size: 130px;
+
+        margin:
+            12px
+            auto
+            8px;
+
+        position: relative;
+
+        animation: none;
+    }
+
+    .reveal {
+        --size: 85px;
+    }
+}
+
+@media (
+    prefers-reduced-motion:
+        reduce
+) {
+    .wrapper {
+        animation: none;
+    }
+
+    .lid,
+    .bowLeft,
+    .bowRight {
+        transition: none;
+    }
+}
