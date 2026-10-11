@@ -1,0 +1,63 @@
+
+.wish {
+    width: max-content;
+    max-width: 300px;
+    color: rgba(247, 222, 232, 0.64);
+    font-family: 'Dancing Script', sans-serif;
+    font-weight: 600;
+    line-height: 1.45;
+    white-space: nowrap;
+    text-align: center;
+    user-select: none;
+    pointer-events: none;
+    backface-visibility: hidden;
+    will-change: opacity;
+    text-shadow:
+        0 0 7px rgba(255, 159, 201, 0.16),
+        0 2px 13px rgba(0, 0, 0, 0.7);
+}
+
+.wishLarge {
+    color: rgba(255, 218, 232, 0.88);
+    font-family: 'Dancing Script', sans-serif;
+    font-size: clamp(24px, 1.9vw, 35px);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    text-shadow:
+        0 0 10px rgba(255, 159, 201, 0.21),
+        0 2px 15px rgba(0, 0, 0, 0.72);
+}
+
+.wishMedium {
+    color: rgba(248, 222, 234, 0.72);
+    font-family: 'Dancing Script', sans-serif;
+    font-size: clamp(16px, 1.2vw, 20px);
+    font-weight: 500;
+}
+
+.wishSmall {
+    max-width: 245px;
+    color: rgba(235, 224, 243, 0.54);
+    font-family: 'Dancing Script', sans-serif;
+    font-size: clamp(10px, 0.7vw, 12px);
+    font-weight: 600;
+    line-height: 1.55;
+}
+
+@media (min-width: 577px) and (max-width: 1023px) {
+    .wishLarge { font-size: clamp(23px, 4vw, 33px); }
+    .wishMedium { font-size: 16px; }
+    .wishSmall { font-size: 10px; }
+}
+
+@media (max-width: 576px) {
+    .wish { max-width: 185px; }
+    .wishLarge { font-size: clamp(21px, 6.2vw, 27px); }
+    .wishMedium { font-size: 13px; }
+    .wishSmall {
+        max-width: 150px;
+        font-size: 8.5px;
+        line-height: 1.45;
+    }
+}
