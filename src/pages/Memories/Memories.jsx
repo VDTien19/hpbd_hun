@@ -5,10 +5,22 @@ import { BURST_DURATION_MS } from './scene/config';
 import styles from './Memories.module.scss';
 
 function Memories() {
+    const explosionCounterRef = useRef(0);
+
+    const explosionTimersRef = useRef(
+        new Map(),
+    );
+
+    /*
+     * Có thể tồn tại nhiều explosion cùng lúc.
+     *
+     * Mỗi phần tử là snapshot của cube tại đúng
+     * thời điểm user click + burstId riêng.
+     */
     const [
-        explodingCube,
-        setExplodingCube,
-    ] = useState(null);
+        explosions,
+        setExplosions,
+    ] = useState([]);
 
     const [
         introReady,
@@ -19,9 +31,6 @@ function Memories() {
         hintVisible,
         setHintVisible,
     ] = useState(false);
-
-    const explosionTimerRef =
-        useRef(null);
 
     useEffect(() => {
         const introTimer =
@@ -43,34 +52,80 @@ function Memories() {
             clearTimeout(
                 introTimer,
             );
+
             clearTimeout(
                 hintTimer,
             );
+
             clearTimeout(
                 hideHintTimer,
             );
-            clearTimeout(
-                explosionTimerRef.current,
+
+            /*
+             * Mỗi explosion có timer riêng,
+             * nên cleanup toàn bộ khi page unmount.
+             */
+            explosionTimersRef.current.forEach(
+                (timer) => {
+                    clearTimeout(timer);
+                },
             );
+
+            explosionTimersRef.current.clear();
         };
     }, []);
 
     const handleExplodeCube = (
         cubeSnapshot,
     ) => {
-        if (explodingCube) {
-            return;
-        }
-
         setHintVisible(false);
-        setExplodingCube(
-            cubeSnapshot,
+
+        explosionCounterRef.current += 1;
+
+        const burstId =
+            `${cubeSnapshot.id}-${explosionCounterRef.current}`;
+
+        const explosion = {
+            ...cubeSnapshot,
+            burstId,
+        };
+
+        /*
+         * PUSH explosion mới vào array.
+         * Không replace explosion đang chạy.
+         */
+        setExplosions(
+            (current) => [
+                ...current,
+                explosion,
+            ],
         );
 
-        explosionTimerRef.current =
-            setTimeout(() => {
-                setExplodingCube(null);
-            }, BURST_DURATION_MS);
+        /*
+         * Mỗi vụ nổ tự có vòng đời riêng.
+         */
+        const timer = setTimeout(
+            () => {
+                setExplosions(
+                    (current) =>
+                        current.filter(
+                            (item) =>
+                                item.burstId !==
+                                burstId,
+                        ),
+                );
+
+                explosionTimersRef.current.delete(
+                    burstId,
+                );
+            },
+            BURST_DURATION_MS,
+        );
+
+        explosionTimersRef.current.set(
+            burstId,
+            timer,
+        );
     };
 
     return (
@@ -105,8 +160,8 @@ function Memories() {
                 }}
             >
                 <Universe
-                    explodingCube={
-                        explodingCube
+                    explosions={
+                        explosions
                     }
                     onExplodeCube={
                         handleExplodeCube
