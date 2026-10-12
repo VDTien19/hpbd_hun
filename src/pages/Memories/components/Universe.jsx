@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useThree } from '@react-three/fiber';
 import { Sparkles, Stars } from '@react-three/drei';
 import { cubeStream, wishStream } from '../data/sceneData';
@@ -9,47 +10,29 @@ import ParticleCake from './ParticleCake';
 import StreamingCube from './StreamingCube';
 import StreamingWish from './StreamingWish';
 
-export default function Universe({
-    explodingCube,
-    onExplodeCube,
-}) {
+export default function Universe({ explosions, onExplodeCube }) {
     const { size } = useThree();
 
-    const isMobile =
-        size.width <= 576;
+    const isMobile = size.width <= 576;
 
-    const interactionLocked =
-        Boolean(explodingCube);
+    const visibleWishCount = isMobile ? Math.min(MOBILE_WISH_COUNT, wishStream.length) : wishStream.length;
 
-    const visibleWishCount =
-        isMobile
-            ? Math.min(
-                  MOBILE_WISH_COUNT,
-                  wishStream.length,
-              )
-            : wishStream.length;
+    /*
+     * Một cube có thể đang có explosion tồn tại.
+     * Set giúp lookup O(1) khi render stream.
+     */
+    const explodingCubeIds = useMemo(() => new Set(explosions.map((explosion) => explosion.id)), [explosions]);
 
     return (
         <>
             <CameraRig />
 
-            <fog
-                attach="fog"
-                args={[
-                    '#020208',
-                    21,
-                    54,
-                ]}
-            />
+            <fog attach="fog" args={['#020208', 21, 54]} />
 
             <Stars
                 radius={68}
                 depth={60}
-                count={
-                    isMobile
-                        ? 800
-                        : 1850
-                }
+                count={isMobile ? 800 : 1850}
                 factor={1.65}
                 saturation={0}
                 fade
@@ -59,16 +42,8 @@ export default function Universe({
             <GalaxyBackdrop />
 
             <Sparkles
-                count={
-                    isMobile
-                        ? 20
-                        : 48
-                }
-                scale={[
-                    25,
-                    17,
-                    23,
-                ]}
+                count={isMobile ? 20 : 48}
+                scale={[25, 17, 23]}
                 size={0.7}
                 speed={0.055}
                 opacity={0.1}
@@ -76,94 +51,54 @@ export default function Universe({
             />
 
             <Sparkles
-                count={
-                    isMobile
-                        ? 10
-                        : 24
-                }
-                scale={[
-                    25,
-                    17,
-                    23,
-                ]}
+                count={isMobile ? 10 : 24}
+                scale={[25, 17, 23]}
                 size={0.65}
                 speed={0.045}
                 opacity={0.08}
                 color="#dce5ff"
             />
 
-            <ParticleCake
-                isMobile={isMobile}
-            />
+            <ParticleCake isMobile={isMobile} />
 
-            {wishStream.map(
-                (wish, index) => {
-                    if (
-                        index >=
-                        visibleWishCount
-                    ) {
-                        return null;
-                    }
+            {wishStream.map((wish, index) => {
+                if (index >= visibleWishCount) {
+                    return null;
+                }
 
-                    return (
-                        <StreamingWish
-                            key={
-                                wish.instanceId
-                            }
-                            wish={wish}
-                            isMobile={
-                                isMobile
-                            }
-                            totalVisible={
-                                visibleWishCount
-                            }
-                        />
-                    );
-                },
-            )}
+                return (
+                    <StreamingWish
+                        key={wish.instanceId}
+                        wish={wish}
+                        isMobile={isMobile}
+                        totalVisible={visibleWishCount}
+                    />
+                );
+            })}
 
-            {cubeStream.map(
-                (cube, index) => {
-                    if (
-                        isMobile &&
-                        index >=
-                            MOBILE_CUBE_COUNT
-                    ) {
-                        return null;
-                    }
+            {cubeStream.map((cube, index) => {
+                if (isMobile && index >= MOBILE_CUBE_COUNT) {
+                    return null;
+                }
 
-                    return (
-                        <StreamingCube
-                            key={cube.id}
-                            cube={cube}
-                            isMobile={
-                                isMobile
-                            }
-                            isSelected={
-                                explodingCube?.id ===
-                                cube.id
-                            }
-                            interactionLocked={
-                                interactionLocked
-                            }
-                            onExplode={
-                                onExplodeCube
-                            }
-                        />
-                    );
-                },
-            )}
+                return (
+                    <StreamingCube
+                        key={cube.id}
+                        cube={cube}
+                        isMobile={isMobile}
+                        isSelected={explodingCubeIds.has(cube.id)}
+                        onExplode={onExplodeCube}
+                    />
+                );
+            })}
 
-            {explodingCube && (
-                <ExplodingCube
-                    cube={
-                        explodingCube
-                    }
-                    isMobile={
-                        isMobile
-                    }
-                />
-            )}
+            {/*
+             * Không còn chỉ 1 explosion.
+             * Mỗi snapshot render một ExplodingCube riêng.
+             */}
+            {explosions.map((explosion) => (
+                <ExplodingCube key={explosion.burstId} cube={explosion} isMobile={isMobile} />
+            ))}
         </>
     );
 }

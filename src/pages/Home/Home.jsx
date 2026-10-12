@@ -12,7 +12,7 @@ function Home() {
     const [password, setPassword] = useState('');
     const [status, setStatus] = useState('idle');
 
-    const CORRECT_PASSWORD = '0000';
+    const CORRECT_PASSWORD = '2111';
 
     useEffect(() => {
         if (password.length !== 4) {

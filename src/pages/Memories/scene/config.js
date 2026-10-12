@@ -12,8 +12,8 @@ export const WISH_NEAR_Z = 7.2;
  * Objects are phase-spaced, so there is no empty "next turn" gap.
  */
 
-export const CUBE_STREAM_SPEED = 0.9;
-export const WISH_STREAM_SPEED = 0.75;
+export const CUBE_STREAM_SPEED = 1.25;
+export const WISH_STREAM_SPEED = 0.9;
 
 export const BURST_DURATION_MS = 1850;
 

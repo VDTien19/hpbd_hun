@@ -14,6 +14,7 @@ function PhotoSlider({ images = [], coverImage, backgroundImage }) {
     const [bookState, setBookState] = useState('closed');
     const [currentPage, setCurrentPage] = useState(0);
     const [turning, setTurning] = useState(null);
+    const [coverAspect, setCoverAspect] = useState(1 / 1.39);
 
     const autoTimerRef = useRef(null);
 
@@ -70,6 +71,21 @@ function PhotoSlider({ images = [], coverImage, backgroundImage }) {
 
         setBookState('closing');
     }, [bookState, currentPage, turning, clearAutoTimer]);
+
+    /*
+     * =====================================================
+     * COVER LOAD
+     * =====================================================
+     */
+    const handleCoverLoad = useCallback((event) => {
+        const image = event.currentTarget;
+
+        if (!image.naturalWidth || !image.naturalHeight) {
+            return;
+        }
+
+        setCoverAspect(image.naturalWidth / image.naturalHeight);
+    }, []);
 
     /*
      * =====================================================
@@ -368,7 +384,12 @@ function PhotoSlider({ images = [], coverImage, backgroundImage }) {
         .join(' ');
 
     return (
-        <div className={styles.wrapper}>
+        <div
+            className={styles.wrapper}
+            style={{
+                '--page-aspect': coverAspect,
+            }}
+        >
             {/*
              * =============================================
              * 3D AREA
@@ -391,7 +412,7 @@ function PhotoSlider({ images = [], coverImage, backgroundImage }) {
 
                     <div className={styles.coverSheet} onTransitionEnd={handleCoverTransitionEnd}>
                         <div className={[styles.frontFace, styles.coverFrontFace].join(' ')}>
-                            <CoverPage image={coverImage} />
+                            <CoverPage image={coverImage} onLoad={handleCoverLoad} />
                         </div>
 
                         <div className={[styles.backFace, styles.coverBackFace].join(' ')}>
@@ -483,10 +504,10 @@ function PhotoSlider({ images = [], coverImage, backgroundImage }) {
  * =========================================================
  */
 
-function CoverPage({ image }) {
+function CoverPage({ image, onLoad }) {
     return (
         <div className={styles.coverPage}>
-            <img src={image} alt="Birthday album cover" draggable={false} />
+            <img src={image} alt="Birthday album cover" draggable={false} onLoad={onLoad} />
         </div>
     );
 }

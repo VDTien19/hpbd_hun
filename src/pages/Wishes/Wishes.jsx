@@ -64,7 +64,6 @@ Happy Birthday, Hunhun ♡`;
         image25,
         image23,
         image27,
-        image26,
         image24,
     ];
 

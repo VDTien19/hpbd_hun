@@ -1,0 +1,526 @@
+/*
+ * =========================================================
+ * MINI MUSIC PLAYER
+ * =========================================================
+ */
+
+.player {
+    position: fixed;
+
+    top: 18px;
+    right: 20px;
+
+    z-index: 9999;
+
+    height: 46px;
+    width: 220px;
+
+    padding: 6px 11px 6px 6px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.42
+        );
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(
+                255,
+                246,
+                251,
+                0.84
+            ),
+            rgba(
+                232,
+                229,
+                250,
+                0.76
+            )
+        );
+
+    backdrop-filter:
+        blur(14px);
+
+    -webkit-backdrop-filter:
+        blur(14px);
+
+    box-shadow:
+        0 8px 26px
+            rgba(
+                70,
+                51,
+                75,
+                0.15
+            ),
+        inset
+            0
+            1px
+            0
+            rgba(
+                255,
+                255,
+                255,
+                0.8
+            );
+
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.player:hover {
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 11px 30px
+            rgba(
+                70,
+                51,
+                75,
+                0.2
+            ),
+        inset
+            0
+            1px
+            0
+            rgba(
+                255,
+                255,
+                255,
+                0.9
+            );
+}
+
+/*
+ * =========================================================
+ * PLAY
+ * =========================================================
+ */
+
+.playButton {
+    width: 34px;
+    height: 34px;
+
+    flex:
+        0 0
+        34px;
+
+    padding: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #d991b0,
+            #a99cda
+        );
+
+    color: #fff;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 14px
+            rgba(
+                131,
+                92,
+                126,
+                0.25
+            );
+
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.playButton:hover {
+    transform:
+        scale(1.06);
+
+    box-shadow:
+        0 7px 17px
+            rgba(
+                131,
+                92,
+                126,
+                0.32
+            );
+}
+
+.playButton:active {
+    transform:
+        scale(0.94);
+}
+
+.playButton:focus-visible {
+    outline:
+        2px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.95
+        );
+
+    outline-offset: 2px;
+}
+
+.playIcon {
+    position: relative;
+
+    left: 1px;
+
+    font-size: 11px;
+}
+
+.pauseIcon {
+    position: relative;
+
+    top: -1px;
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing:
+        -2px;
+}
+
+/*
+ * =========================================================
+ * PROGRESS
+ * =========================================================
+ */
+
+.progressWrapper {
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+}
+
+.progress {
+    --progress: 0%;
+
+    width: 100%;
+    height: 4px;
+
+    margin: 0;
+
+    appearance: none;
+
+    border: none;
+
+    border-radius: 999px;
+
+    outline: none;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            to right,
+            #d787aa
+                0%,
+            #ad9be0
+                var(
+                    --progress
+                ),
+            rgba(
+                    104,
+                    86,
+                    112,
+                    0.13
+                )
+                var(
+                    --progress
+                ),
+            rgba(
+                    104,
+                    86,
+                    112,
+                    0.13
+                )
+                100%
+        );
+}
+
+.progress::-webkit-slider-thumb {
+    width: 10px;
+    height: 10px;
+
+    appearance: none;
+
+    border:
+        2px solid
+        #fff;
+
+    border-radius: 50%;
+
+    background:
+        #c681a1;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 7px
+            rgba(
+                91,
+                62,
+                81,
+                0.25
+            );
+
+    transition:
+        transform 140ms ease;
+}
+
+.progress:hover::-webkit-slider-thumb {
+    transform:
+        scale(1.15);
+}
+
+.progress::-moz-range-thumb {
+    width: 8px;
+    height: 8px;
+
+    border:
+        2px solid
+        #fff;
+
+    border-radius: 50%;
+
+    background:
+        #c681a1;
+
+    cursor: pointer;
+}
+
+/*
+ * =========================================================
+ * SOUND WAVE
+ * =========================================================
+ */
+
+.wave {
+    width: 29px;
+    height: 25px;
+
+    flex:
+        0 0
+        29px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 2px;
+}
+
+.wave span {
+    width: 3px;
+    height: 5px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            to top,
+            #d684a8,
+            #a99ee0
+        );
+
+    opacity: 0.5;
+
+    transition:
+        height 180ms ease,
+        opacity 180ms ease;
+}
+
+/*
+ * Chỉ chạy khi nhạc phát.
+ */
+
+.wavePlaying span {
+    opacity: 1;
+}
+
+.wavePlaying
+    span:nth-child(1) {
+    animation:
+        waveOne
+        620ms
+        ease-in-out
+        infinite
+        alternate;
+}
+
+.wavePlaying
+    span:nth-child(2) {
+    animation:
+        waveTwo
+        470ms
+        ease-in-out
+        infinite
+        alternate;
+}
+
+.wavePlaying
+    span:nth-child(3) {
+    animation:
+        waveThree
+        720ms
+        ease-in-out
+        infinite
+        alternate;
+}
+
+.wavePlaying
+    span:nth-child(4) {
+    animation:
+        waveTwo
+        540ms
+        ease-in-out
+        infinite
+        alternate-reverse;
+}
+
+.wavePlaying
+    span:nth-child(5) {
+    animation:
+        waveOne
+        680ms
+        ease-in-out
+        infinite
+        alternate-reverse;
+}
+
+/*
+ * =========================================================
+ * ANIMATION
+ * =========================================================
+ */
+
+@keyframes waveOne {
+    from {
+        height: 5px;
+    }
+
+    to {
+        height: 14px;
+    }
+}
+
+@keyframes waveTwo {
+    from {
+        height: 8px;
+    }
+
+    to {
+        height: 21px;
+    }
+}
+
+@keyframes waveThree {
+    from {
+        height: 6px;
+    }
+
+    to {
+        height: 17px;
+    }
+}
+
+/*
+ * =========================================================
+ * MOBILE
+ * =========================================================
+ */
+
+@media (
+    max-width: 576px
+) {
+    .player {
+        top: 12px;
+        right: 12px;
+
+        width: auto;
+        height: 42px;
+
+        padding:
+            5px
+            9px
+            5px
+            5px;
+
+        gap: 7px;
+    }
+
+    /*
+     * Mobile:
+     * bỏ progress hoàn toàn.
+     */
+
+    .progressWrapper {
+        display: none;
+    }
+
+    .playButton {
+        width: 32px;
+        height: 32px;
+
+        flex-basis:
+            32px;
+    }
+
+    .wave {
+        width: 27px;
+
+        flex-basis:
+            27px;
+    }
+}
+
+/*
+ * =========================================================
+ * REDUCED MOTION
+ * =========================================================
+ */
+
+@media (
+    prefers-reduced-motion:
+        reduce
+) {
+    .wavePlaying span {
+        animation: none;
+    }
+}
