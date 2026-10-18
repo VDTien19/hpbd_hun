@@ -1,10 +1,6 @@
-import {
-    useState,
-} from 'react';
+import { useState } from 'react';
 
-import {
-    useNavigate,
-} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import gifts from './data/gifts';
 
@@ -15,15 +11,14 @@ import SelectedGiftStep from './components/SelectedGiftStep';
 import TrollStep from './components/TrollStep';
 import RevealAllStep from './components/RevealAllStep';
 import CandleStep from './components/CandleStep';
+import { sendGiftSelected, sendTrollAnswer } from '@/services/birthdayEventService';
 
 import styles from './Gifts.module.scss';
 
-const MEMORIES_ROUTE =
-    '/memories';
+const MEMORIES_ROUTE = '/memories';
 
 function Gifts() {
-    const navigate =
-        useNavigate();
+    const navigate = useNavigate();
 
     /*
      * choose
@@ -33,15 +28,9 @@ function Gifts() {
      * revealAll
      * candle
      */
-    const [
-        step,
-        setStep,
-    ] = useState('choose');
+    const [step, setStep] = useState('choose');
 
-    const [
-        selectedGift,
-        setSelectedGift,
-    ] = useState(null);
+    const [selectedGift, setSelectedGift] = useState(null);
 
     /*
      * =============================================
@@ -49,16 +38,10 @@ function Gifts() {
      * =============================================
      */
 
-    const handleSelectGift = (
-        gift,
-    ) => {
-        setSelectedGift(
-            gift,
-        );
+    const handleSelectGift = (gift) => {
+        setSelectedGift(gift);
 
-        setStep(
-            'confirm',
-        );
+        setStep('confirm');
     };
 
     /*
@@ -67,33 +50,31 @@ function Gifts() {
      * =============================================
      */
 
-    const handleCancelGift =
-        () => {
-            setSelectedGift(
-                null,
-            );
+    const handleCancelGift = () => {
+        setSelectedGift(null);
 
-            setStep(
-                'choose',
-            );
-        };
+        setStep('choose');
+    };
 
-    const handleConfirmGift =
-        () => {
-            if (!selectedGift) {
-                return;
-            }
+    const handleConfirmGift = () => {
+        if (!selectedGift) {
+            return;
+        }
 
-            /*
-             * Nếu sau này bạn có API
-             * lưu gift thì đặt call
-             * ở đây.
-             */
+        /*
+         * User đã xác nhận
+         * lựa chọn hộp quà.
+         */
+        void sendGiftSelected({
+            giftId: selectedGift.id,
 
-            setStep(
-                'selected',
-            );
-        };
+            giftNumber: selectedGift.number,
+
+            giftHint: selectedGift.hint,
+        });
+
+        setStep('selected');
+    };
 
     /*
      * =============================================
@@ -101,129 +82,56 @@ function Gifts() {
      * =============================================
      */
 
-    const handleGoToTroll =
-        () => {
-            setStep(
-                'troll',
-            );
-        };
+    const handleGoToTroll = () => {
+        setStep('troll');
+    };
 
-    const handleTrollFinish =
-        () => {
-            setStep(
-                'revealAll',
-            );
-        };
+    const handleTrollFinish = (answer) => {
+        void sendTrollAnswer({
+            answer,
+        });
 
-    const handleRevealFinish =
-        () => {
-            setStep(
-                'candle',
-            );
-        };
+        setStep('revealAll');
+    };
 
-    const handleCandleFinish =
-        () => {
-            navigate(
-                MEMORIES_ROUTE,
-            );
-        };
+    const handleRevealFinish = () => {
+        setStep('candle');
+    };
+
+    const handleCandleFinish = () => {
+        navigate(MEMORIES_ROUTE);
+    };
 
     return (
-        <main
-            className={
-                styles.page
-            }
-        >
+        <main className={styles.page}>
             <Decorations />
 
-            <div
-                className={
-                    styles.content
-                }
-            >
-                {(step === 'choose' ||
-                    step ===
-                        'confirm') && (
+            <div className={styles.content}>
+                {(step === 'choose' || step === 'confirm') && (
                     <ChooseGiftStep
-                        gifts={
-                            gifts
-                        }
-                        selectedGift={
-                            selectedGift
-                        }
-                        isConfirming={
-                            step ===
-                            'confirm'
-                        }
-                        onSelect={
-                            handleSelectGift
-                        }
+                        gifts={gifts}
+                        selectedGift={selectedGift}
+                        isConfirming={step === 'confirm'}
+                        onSelect={handleSelectGift}
                     />
                 )}
 
-                {step ===
-                    'selected' &&
-                    selectedGift && (
-                    <SelectedGiftStep
-                        gift={
-                            selectedGift
-                        }
-                        onContinue={
-                            handleGoToTroll
-                        }
-                    />
+                {step === 'selected' && selectedGift && (
+                    <SelectedGiftStep gift={selectedGift} onContinue={handleGoToTroll} />
                 )}
 
-                {step ===
-                    'troll' && (
-                    <TrollStep
-                        onFinish={
-                            handleTrollFinish
-                        }
-                    />
+                {step === 'troll' && <TrollStep onFinish={handleTrollFinish} />}
+
+                {step === 'revealAll' && selectedGift && (
+                    <RevealAllStep gifts={gifts} selectedGift={selectedGift} onContinue={handleRevealFinish} />
                 )}
 
-                {step ===
-                    'revealAll' &&
-                    selectedGift && (
-                    <RevealAllStep
-                        gifts={
-                            gifts
-                        }
-                        selectedGift={
-                            selectedGift
-                        }
-                        onContinue={
-                            handleRevealFinish
-                        }
-                    />
-                )}
-
-                {step ===
-                    'candle' && (
-                    <CandleStep
-                        onComplete={
-                            handleCandleFinish
-                        }
-                    />
-                )}
+                {step === 'candle' && <CandleStep onComplete={handleCandleFinish} />}
             </div>
 
-            {step === 'confirm' &&
-                selectedGift && (
-                    <GiftModal
-                        gift={
-                            selectedGift
-                        }
-                        onCancel={
-                            handleCancelGift
-                        }
-                        onConfirm={
-                            handleConfirmGift
-                        }
-                    />
-                )}
+            {step === 'confirm' && selectedGift && (
+                <GiftModal gift={selectedGift} onCancel={handleCancelGift} onConfirm={handleConfirmGift} />
+            )}
         </main>
     );
 }

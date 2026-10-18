@@ -82,7 +82,9 @@ function TrollStep({ onFinish }) {
 
         setAnswer(value);
 
-        timerRef.current = setTimeout(onFinish, 800);
+        timerRef.current = setTimeout(() => {
+            onFinish(value);
+        }, 800);
     };
 
     /*
