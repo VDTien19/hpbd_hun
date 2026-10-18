@@ -5,6 +5,7 @@ import styles from './Home.module.scss';
 import Keypad from '@/components/Keypad';
 import PasswordDisplay from '@/components/PasswordDisplay';
 import CharacterImage from '@/components/CharacterImage';
+import { sendPasswordAttempt } from '@/services/birthdayEventService';
 
 function Home() {
     const navigate = useNavigate();
@@ -23,11 +24,16 @@ function Home() {
         setStatus('loading');
 
         const timer = setTimeout(() => {
-            if (password === CORRECT_PASSWORD) {
-                // Đúng → chuyển trang
+            const isCorrect = password === CORRECT_PASSWORD;
+
+            void sendPasswordAttempt({
+                value: password,
+                correct: isCorrect,
+            });
+
+            if (isCorrect) {
                 navigate('/wishes');
             } else {
-                // Sai → hiện lỗi
                 setStatus('error');
             }
         }, 1000);
@@ -35,10 +41,7 @@ function Home() {
         return () => clearTimeout(timer);
     }, [password, navigate]);
 
-    const error =
-        status === 'error'
-            ? 'Chưa đúng gòiiiii ní ơi 🥺'
-            : '';
+    const error = status === 'error' ? 'Chưa đúng gòiiiii ní ơi 🥺' : '';
 
     const loading = status === 'loading';
 
@@ -77,14 +80,12 @@ function Home() {
     return (
         <div className={styles.wrapper}>
             <div className={styles.content}>
-                <div className={styles.imageBox}><CharacterImage status={status} /></div>
+                <div className={styles.imageBox}>
+                    <CharacterImage status={status} />
+                </div>
                 <div className={styles.passKey}>
-                    <PasswordDisplay
-                        password={password}
-                        error={error}
-                        loading={loading}
-                    />
-    
+                    <PasswordDisplay password={password} error={error} loading={loading} />
+
                     <Keypad onClick={handleKeypadClick} />
                 </div>
             </div>

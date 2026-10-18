@@ -1,12 +1,39 @@
-import {
-    supabase,
-} from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
-const SESSION_KEY =
-    'birthday_session_id';
+const SESSION_KEY = 'birthday_session_id';
 
-const ANSWER_STATE_KEY =
-    'birthday_answer_state';
+const ANSWER_STATE_KEY = 'birthday_answer_state';
+
+function createUuid() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+
+    const bytes = new Uint8Array(16);
+
+    crypto.getRandomValues(bytes);
+
+    /*
+     * UUID v4
+     */
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+    const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0'));
+
+    return [
+        hex.slice(0, 4).join(''),
+
+        hex.slice(4, 6).join(''),
+
+        hex.slice(6, 8).join(''),
+
+        hex.slice(8, 10).join(''),
+
+        hex.slice(10, 16).join(''),
+    ].join('-');
+}
 
 /*
  * =========================================================
@@ -23,19 +50,12 @@ const ANSWER_STATE_KEY =
  */
 
 export function getBirthdaySessionId() {
-    let sessionId =
-        sessionStorage.getItem(
-            SESSION_KEY,
-        );
+    let sessionId = sessionStorage.getItem(SESSION_KEY);
 
     if (!sessionId) {
-        sessionId =
-            crypto.randomUUID();
+        sessionId = createUuid();
 
-        sessionStorage.setItem(
-            SESSION_KEY,
-            sessionId,
-        );
+        sessionStorage.setItem(SESSION_KEY, sessionId);
     }
 
     return sessionId;
@@ -64,33 +84,21 @@ export function getBirthdaySessionId() {
  */
 
 function getAnswerState() {
-    const raw =
-        sessionStorage.getItem(
-            ANSWER_STATE_KEY,
-        );
+    const raw = sessionStorage.getItem(ANSWER_STATE_KEY);
 
     if (!raw) {
         return {};
     }
 
     try {
-        return JSON.parse(
-            raw,
-        );
+        return JSON.parse(raw);
     } catch {
         return {};
     }
 }
 
-function saveAnswerState(
-    state,
-) {
-    sessionStorage.setItem(
-        ANSWER_STATE_KEY,
-        JSON.stringify(
-            state,
-        ),
-    );
+function saveAnswerState(state) {
+    sessionStorage.setItem(ANSWER_STATE_KEY, JSON.stringify(state));
 }
 
 /*
@@ -99,49 +107,27 @@ function saveAnswerState(
  * =========================================================
  */
 
-export async function sendBirthdayEvent({
-    type,
-    eventId,
-    payload = {},
-}) {
-    const sessionId =
-        getBirthdaySessionId();
+export async function sendBirthdayEvent({ type, eventId, payload = {} }) {
+    const sessionId = getBirthdaySessionId();
 
-    const eventKey = [
-        sessionId,
-        type,
-        eventId,
-    ]
-        .filter(Boolean)
-        .join(':');
+    const eventKey = [sessionId, type, eventId].filter(Boolean).join(':');
 
-    const {
-        data,
-        error,
-    } =
-        await supabase.functions.invoke(
-            'birthday-event',
-            {
-                body: {
-                    eventKey,
+    const { data, error } = await supabase.functions.invoke('birthday-event', {
+        body: {
+            eventKey,
 
-                    sessionId,
+            sessionId,
 
-                    projectKey:
-                        'ju-birthday',
+            projectKey: 'ju-birthday',
 
-                    type,
+            type,
 
-                    payload,
-                },
-            },
-        );
+            payload,
+        },
+    });
 
     if (error) {
-        console.error(
-            '[Birthday Event]',
-            error,
-        );
+        console.error('[Birthday Event]', error);
 
         return {
             ok: false,
@@ -175,108 +161,101 @@ export async function sendBirthdayEvent({
  */
 
 export async function sendAnswerChange({
+    questionNumber,
     questionId,
     question,
-    answerId,
-    answerText,
+    answerType,
+    answerId = null,
+    answerText = '',
+    extra = {},
 }) {
-    const sessionId =
-        getBirthdaySessionId();
+    const sessionId = getBirthdaySessionId();
 
-    const answerState =
-        getAnswerState();
+    const answerState = getAnswerState();
 
-    const previous =
-        answerState[
-            questionId
-        ] ?? null;
+    const previous = answerState[questionId] ?? null;
+
+    const normalizedAnswerText = String(answerText).trim();
 
     /*
-     * Người dùng vẫn chọn đúng
-     * đáp án hiện tại.
+     * Trạng thái hiện tại của câu trả lời.
      *
-     * Không có thay đổi.
+     * extra dùng cho những dữ liệu phụ,
+     * ví dụ Q4 có keepSecret.
      */
-    if (
-        previous?.answerId ===
-        answerId
-    ) {
+    const currentAnswer = {
+        answerType,
+
+        answerId: answerId ?? null,
+
+        answerText: normalizedAnswerText,
+
+        extra,
+    };
+
+    /*
+     * Kiểm tra user có thực sự
+     * thay đổi câu trả lời hay không.
+     */
+    const isSameAnswer =
+        previous &&
+        previous.answerType === currentAnswer.answerType &&
+        previous.answerId === currentAnswer.answerId &&
+        previous.answerText === currentAnswer.answerText &&
+        JSON.stringify(previous.extra ?? {}) === JSON.stringify(currentAnswer.extra ?? {});
+
+    if (isSameAnswer) {
         return {
             ok: true,
             skipped: true,
-            reason:
-                'answer-not-changed',
+            reason: 'answer-not-changed',
         };
     }
 
     /*
      * Mỗi lần thay đổi thật sự
-     * là một event riêng.
+     * → event mới.
      */
-    const interactionId =
-        crypto.randomUUID();
+    const interactionId = createUuid();
 
-    const eventKey = [
-        sessionId,
-        'answer',
-        questionId,
-        interactionId,
-    ].join(':');
+    const eventKey = [sessionId, 'answer', questionId, interactionId].join(':');
 
     const payload = {
+        questionNumber,
+
         questionId,
 
         question,
 
-        previousAnswerId:
-            previous?.answerId ??
-            null,
+        answerType,
 
-        previousAnswer:
-            previous?.answerText ??
-            null,
+        previousAnswerId: previous?.answerId ?? null,
 
-        answerId,
+        previousAnswer: previous?.answerText ?? null,
 
-        answer:
-            answerText,
+        answerId: currentAnswer.answerId,
+
+        answer: currentAnswer.answerText,
+
+        ...extra,
     };
 
-    const {
-        data,
-        error,
-    } =
-        await supabase.functions.invoke(
-            'birthday-event',
-            {
-                body: {
-                    eventKey,
+    const { data, error } = await supabase.functions.invoke('birthday-event', {
+        body: {
+            eventKey,
 
-                    sessionId,
+            sessionId,
 
-                    projectKey:
-                        'ju-birthday',
+            projectKey: 'ju-birthday',
 
-                    type:
-                        'answer',
+            type: 'answer',
 
-                    payload,
-                },
-            },
-        );
+            payload,
+        },
+    });
 
     if (error) {
-        console.error(
-            '[Answer Change]',
-            error,
-        );
-
-        /*
-         * Request lỗi
-         * → KHÔNG update local state.
-         *
-         * Lần sau vẫn có thể gửi lại.
-         */
+        console.error('[Answer Change]', error);
 
         return {
             ok: false,
@@ -286,20 +265,11 @@ export async function sendAnswerChange({
 
     /*
      * Backend nhận thành công rồi
-     * mới ghi nhận đáp án hiện tại.
+     * mới nhớ đáp án hiện tại.
      */
+    answerState[questionId] = currentAnswer;
 
-    answerState[
-        questionId
-    ] = {
-        answerId,
-
-        answerText,
-    };
-
-    saveAnswerState(
-        answerState,
-    );
+    saveAnswerState(answerState);
 
     return data;
 }
@@ -316,7 +286,179 @@ export async function sendAnswerChange({
  */
 
 export function resetBirthdayAnswerState() {
-    sessionStorage.removeItem(
-        ANSWER_STATE_KEY,
-    );
+    sessionStorage.removeItem(ANSWER_STATE_KEY);
+}
+
+/*
+ * =========================================================
+ * PASSWORD ATTEMPT
+ * =========================================================
+ *
+ * Mỗi lần người dùng nhập đủ 4 số
+ * là một event mới.
+ *
+ * Ví dụ:
+ *
+ * 1234 → sai → gửi
+ * 1111 → sai → gửi
+ * 2111 → đúng → gửi
+ *
+ * Tất cả vẫn thuộc cùng một session.
+ */
+
+export async function sendPasswordAttempt({ value, correct }) {
+    const sessionId = getBirthdaySessionId();
+
+    /*
+     * Mỗi lần thử password
+     * phải có interactionId mới.
+     */
+    const interactionId = createUuid();
+
+    const eventKey = [sessionId, 'password_attempt', interactionId].join(':');
+
+    const { data, error } = await supabase.functions.invoke('birthday-event', {
+        body: {
+            eventKey,
+
+            sessionId,
+
+            projectKey: 'ju-birthday',
+
+            type: 'password_attempt',
+
+            payload: {
+                value,
+                correct,
+            },
+        },
+    });
+
+    if (error) {
+        console.error('[Password Attempt]', error);
+
+        return {
+            ok: false,
+            error,
+        };
+    }
+
+    return data;
+}
+
+/*
+ * =========================================================
+ * TROLL ANSWER
+ * =========================================================
+ */
+
+export async function sendTrollAnswer({ answer }) {
+    const sessionId = getBirthdaySessionId();
+
+    const interactionId = createUuid();
+
+    const eventKey = [sessionId, 'troll_answered', interactionId].join(':');
+
+    const { data, error } = await supabase.functions.invoke('birthday-event', {
+        body: {
+            eventKey,
+
+            sessionId,
+
+            projectKey: 'ju-birthday',
+
+            type: 'troll_answered',
+
+            payload: {
+                answer,
+            },
+        },
+    });
+
+    if (error) {
+        console.error('[Troll Answer]', error);
+
+        return {
+            ok: false,
+            error,
+        };
+    }
+
+    return data;
+}
+
+/*
+ * =========================================================
+ * GIFT SELECTED
+ * =========================================================
+ *
+ * Gửi khi user XÁC NHẬN chọn hộp quà.
+ */
+
+export async function sendGiftSelected({ giftId, giftNumber, giftHint = '' }) {
+    const sessionId = getBirthdaySessionId();
+
+    const interactionId = createUuid();
+
+    const eventKey = [sessionId, 'gift_selected', interactionId].join(':');
+
+    const { data, error } = await supabase.functions.invoke('birthday-event', {
+        body: {
+            eventKey,
+
+            sessionId,
+
+            projectKey: 'ju-birthday',
+
+            type: 'gift_selected',
+
+            payload: {
+                giftId,
+                giftNumber,
+                giftHint,
+            },
+        },
+    });
+
+    if (error) {
+        console.error('[Gift Selected]', error);
+
+        return {
+            ok: false,
+            error,
+        };
+    }
+
+    return data;
+}
+
+/*
+ * =========================================================
+ * MEMORIES REACHED
+ * =========================================================
+ *
+ * Chỉ gửi 1 lần trong cùng session.
+ *
+ * F5 / remount:
+ * backend sẽ coi là duplicate.
+ */
+
+export function sendMemoriesReached() {
+    return sendBirthdayEvent({
+        type: 'memories_reached',
+        eventId: 'memories',
+
+        payload: {
+            page: 'memories',
+        },
+    });
+}
+
+// Người dùng bắt đầu mở trang → gửi event này lên để biết có bao nhiêu người đã vào trang.
+export function sendSessionStarted() {
+    return sendBirthdayEvent({
+        type: 'session_started',
+        eventId: 'start',
+        payload: {},
+    });
 }

@@ -1,8 +1,4 @@
-import {
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Intro from './components/Intro';
 import Decorations from './components/Decorations';
@@ -10,61 +6,40 @@ import QuestionContent from './components/QuestionContent';
 import QuestionFooter from './components/QuestionFooter';
 import SubmitSuccess from './components/SubmitSuccess';
 
-import {
-    TOTAL_QUESTIONS,
-} from './data/questions';
+import { TOTAL_QUESTIONS, questionOneOptions } from './data/questions';
+
+import { sendAnswerChange } from '@/services/birthdayEventService';
 
 import styles from './Questions.module.scss';
 
 function Questions() {
-    const [
-        currentQuestion,
-        setCurrentQuestion,
-    ] = useState(0);
+    const [currentQuestion, setCurrentQuestion] = useState(0);
 
-    const [answers, setAnswers] =
-        useState({
-            mood: '',
-            newThing: '',
-            futureMessage: '',
-            wish: '',
-            keepSecret: false,
-        });
+    const [answers, setAnswers] = useState({
+        mood: '',
+        newThing: '',
+        futureMessage: '',
+        wish: '',
+        keepSecret: false,
+    });
 
-    const [
-        transitionState,
-        setTransitionState,
-    ] = useState('idle');
+    const [transitionState, setTransitionState] = useState('idle');
 
-    const [
-        direction,
-        setDirection,
-    ] = useState('next');
+    const [direction, setDirection] = useState('next');
 
-    const [
-        submitState,
-        setSubmitState,
-    ] = useState('idle');
+    const [submitState, setSubmitState] = useState('idle');
 
-    const transitionTimerRef =
-        useRef(null);
+    const transitionTimerRef = useRef(null);
 
-    const enterTimerRef =
-        useRef(null);
+    const enterTimerRef = useRef(null);
 
-    const submitTimerRef =
-        useRef(null);
+    const submitTimerRef = useRef(null);
 
-    const isFirstQuestion =
-        currentQuestion === 0;
+    const isFirstQuestion = currentQuestion === 0;
 
-    const isLastQuestion =
-        currentQuestion ===
-        TOTAL_QUESTIONS - 1;
+    const isLastQuestion = currentQuestion === TOTAL_QUESTIONS - 1;
 
-    const canContinue =
-        currentQuestion !== 0 ||
-        Boolean(answers.mood);
+    const canContinue = currentQuestion !== 0 || Boolean(answers.mood);
 
     /*
      * =====================================================
@@ -74,17 +49,11 @@ function Questions() {
 
     useEffect(() => {
         return () => {
-            clearTimeout(
-                transitionTimerRef.current,
-            );
+            clearTimeout(transitionTimerRef.current);
 
-            clearTimeout(
-                enterTimerRef.current,
-            );
+            clearTimeout(enterTimerRef.current);
 
-            clearTimeout(
-                submitTimerRef.current,
-            );
+            clearTimeout(submitTimerRef.current);
         };
     }, []);
 
@@ -94,10 +63,7 @@ function Questions() {
      * =====================================================
      */
 
-    const updateAnswer = (
-        key,
-        value,
-    ) => {
+    const updateAnswer = (key, value) => {
         setAnswers((prev) => ({
             ...prev,
             [key]: value,
@@ -106,70 +72,187 @@ function Questions() {
 
     /*
      * =====================================================
+     * SEND CURRENT QUESTION
+     * =====================================================
+     *
+     * Không gửi trong updateAnswer().
+     *
+     * Chỉ gửi khi user bấm:
+     *
+     * Next
+     * hoặc
+     * Submit
+     */
+
+    const sendCurrentAnswer = () => {
+        switch (currentQuestion) {
+            /*
+             * =============================================
+             * QUESTION 1
+             * =============================================
+             */
+
+            case 0: {
+                const selectedOption = questionOneOptions.find((option) => option.id === answers.mood);
+
+                if (!selectedOption) {
+                    return;
+                }
+
+                void sendAnswerChange({
+                    questionNumber: 1,
+
+                    questionId: 'q1',
+
+                    question: 'Bước qua tuổi mới, bạn nhỏ vui không?',
+
+                    answerType: 'choice',
+
+                    answerId: selectedOption.id,
+
+                    answerText: selectedOption.label,
+                });
+
+                break;
+            }
+
+            /*
+             * =============================================
+             * QUESTION 2
+             * =============================================
+             */
+
+            case 1:
+                void sendAnswerChange({
+                    questionNumber: 2,
+
+                    questionId: 'q2',
+
+                    question: 'Tuổi mới, có điều gì bạn muốn làm mà trước giờ vẫn chưa làm được không?',
+
+                    answerType: 'text',
+
+                    answerText: answers.newThing,
+                });
+
+                break;
+
+            /*
+             * =============================================
+             * QUESTION 3
+             * =============================================
+             */
+
+            case 2:
+                void sendAnswerChange({
+                    questionNumber: 3,
+
+                    questionId: 'q3',
+
+                    question: 'Nếu được nhắn một câu cho Hương của một năm sau, bạn sẽ nói gì?',
+
+                    answerType: 'text',
+
+                    answerText: answers.futureMessage,
+                });
+
+                break;
+
+            /*
+             * =============================================
+             * QUESTION 4
+             * =============================================
+             */
+
+            case 3:
+                void sendAnswerChange({
+                    questionNumber: 4,
+
+                    questionId: 'q4',
+
+                    question: 'Bạn nhỏ có một điều ước cho tuổi mới không?',
+
+                    answerType: 'text',
+
+                    answerText: answers.wish,
+
+                    extra: {
+                        keepSecret: answers.keepSecret,
+                    },
+                });
+
+                break;
+
+            default:
+                break;
+        }
+    };
+
+    /*
+     * =====================================================
      * CHANGE QUESTION
      * =====================================================
      */
 
-    const changeQuestion = (
-        nextIndex,
-        nextDirection,
-    ) => {
-        if (
-            transitionState !== 'idle' ||
-            nextIndex < 0 ||
-            nextIndex >= TOTAL_QUESTIONS
-        ) {
+    const changeQuestion = (nextIndex, nextDirection) => {
+        if (transitionState !== 'idle' || nextIndex < 0 || nextIndex >= TOTAL_QUESTIONS) {
             return;
         }
 
         setDirection(nextDirection);
 
-        setTransitionState(
-            'leaving',
-        );
+        setTransitionState('leaving');
 
-        transitionTimerRef.current =
-            setTimeout(() => {
-                setCurrentQuestion(
-                    nextIndex,
-                );
+        transitionTimerRef.current = setTimeout(() => {
+            setCurrentQuestion(nextIndex);
 
-                setTransitionState(
-                    'entering',
-                );
+            setTransitionState('entering');
 
-                enterTimerRef.current =
-                    setTimeout(() => {
-                        setTransitionState(
-                            'idle',
-                        );
-                    }, 380);
-            }, 220);
+            enterTimerRef.current = setTimeout(() => {
+                setTransitionState('idle');
+            }, 380);
+        }, 220);
     };
 
+    /*
+     * =====================================================
+     * NEXT
+     * =====================================================
+     */
+
     const handleNext = () => {
-        if (
-            !canContinue ||
-            isLastQuestion
-        ) {
+        if (!canContinue || isLastQuestion) {
             return;
         }
 
-        changeQuestion(
-            currentQuestion + 1,
-            'next',
-        );
+        /*
+         * Gửi câu hiện tại trước.
+         *
+         * Không await nên animation
+         * chuyển câu vẫn chạy ngay.
+         */
+        sendCurrentAnswer();
+
+        changeQuestion(currentQuestion + 1, 'next');
     };
+
+    /*
+     * =====================================================
+     * BACK
+     * =====================================================
+     */
 
     const handleBack = () => {
         if (isFirstQuestion) {
             return;
         }
 
-        changeQuestion(
-            currentQuestion - 1,
-            'back',
-        );
+        /*
+         * Back chỉ chuyển trang.
+         *
+         * Không gửi event ở đây.
+         */
+        changeQuestion(currentQuestion - 1, 'back');
     };
 
     /*
@@ -179,18 +262,21 @@ function Questions() {
      */
 
     const handleSubmit = () => {
-        if (
-            submitState !== 'idle'
-        ) {
+        if (submitState !== 'idle') {
             return;
         }
 
+        /*
+         * Submit ở question cuối
+         * → gửi Q4.
+         */
+        sendCurrentAnswer();
+
         setSubmitState('saved');
 
-        submitTimerRef.current =
-            setTimeout(() => {
-                setSubmitState('ready');
-            }, 1000);
+        submitTimerRef.current = setTimeout(() => {
+            setSubmitState('ready');
+        }, 1000);
     };
 
     /*
@@ -202,17 +288,9 @@ function Questions() {
     const cardClasses = [
         styles.questionCard,
 
-        transitionState === 'leaving'
-            ? direction === 'next'
-                ? styles.leaveNext
-                : styles.leaveBack
-            : '',
+        transitionState === 'leaving' ? (direction === 'next' ? styles.leaveNext : styles.leaveBack) : '',
 
-        transitionState === 'entering'
-            ? direction === 'next'
-                ? styles.enterNext
-                : styles.enterBack
-            : '',
+        transitionState === 'entering' ? (direction === 'next' ? styles.enterNext : styles.enterBack) : '',
     ]
         .filter(Boolean)
         .join(' ');
@@ -224,65 +302,29 @@ function Questions() {
             <div className={styles.container}>
                 <Intro />
 
-                <section
-                    className={
-                        styles.questionArea
-                    }
-                >
-                    <div
-                        className={
-                            cardClasses
-                        }
-                    >
-                        {submitState ===
-                        'idle' ? (
+                <section className={styles.questionArea}>
+                    <div className={cardClasses}>
+                        {submitState === 'idle' ? (
                             <>
                                 <QuestionContent
-                                    currentQuestion={
-                                        currentQuestion
-                                    }
-                                    answers={
-                                        answers
-                                    }
-                                    updateAnswer={
-                                        updateAnswer
-                                    }
+                                    currentQuestion={currentQuestion}
+                                    answers={answers}
+                                    updateAnswer={updateAnswer}
                                 />
 
                                 <QuestionFooter
-                                    currentQuestion={
-                                        currentQuestion
-                                    }
-                                    canContinue={
-                                        canContinue
-                                    }
-                                    isFirstQuestion={
-                                        isFirstQuestion
-                                    }
-                                    isLastQuestion={
-                                        isLastQuestion
-                                    }
-                                    disabled={
-                                        transitionState !==
-                                        'idle'
-                                    }
-                                    onBack={
-                                        handleBack
-                                    }
-                                    onNext={
-                                        handleNext
-                                    }
-                                    onSubmit={
-                                        handleSubmit
-                                    }
+                                    currentQuestion={currentQuestion}
+                                    canContinue={canContinue}
+                                    isFirstQuestion={isFirstQuestion}
+                                    isLastQuestion={isLastQuestion}
+                                    disabled={transitionState !== 'idle'}
+                                    onBack={handleBack}
+                                    onNext={handleNext}
+                                    onSubmit={handleSubmit}
                                 />
                             </>
                         ) : (
-                            <SubmitSuccess
-                                state={
-                                    submitState
-                                }
-                            />
+                            <SubmitSuccess state={submitState} />
                         )}
                     </div>
                 </section>

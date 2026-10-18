@@ -7,9 +7,12 @@ import {
 const allowedEventTypes =
     new Set([
         'session_started',
+        'password_attempt',
         'answer',
+        'troll_answered',
         'gift_selected',
         'completed',
+        'memories_reached',
     ]);
 
 function formatTelegramMessage(
@@ -23,15 +26,26 @@ function formatTelegramMessage(
         case 'session_started':
             return [
                 '🌷 Có người vừa mở birthday site',
-                '',
                 'Birthday for Ju ♡',
             ].join('\n');
 
         case 'answer': {
+            const questionNumber =
+                String(
+                    payload.questionNumber ??
+                        '?',
+                );
+
             const question =
                 String(
                     payload.question ??
-                        'Question',
+                        '',
+                );
+
+            const answer =
+                String(
+                    payload.answer ??
+                        '',
                 );
 
             const previousAnswer =
@@ -41,58 +55,95 @@ function formatTelegramMessage(
                     )
                     : null;
 
-            const answer =
-                String(
-                    payload.answer ??
-                        '-',
-                );
-
-            /*
-            * Lần đầu trả lời.
-            */
-
-            if (!previousAnswer) {
+            if (previousAnswer) {
                 return [
-                    '💌 Có câu trả lời mới',
+                    `💌 Câu hỏi ${questionNumber} đã đổi đáp án`,
                     '',
                     question,
                     '',
-                    `→ ${answer}`,
+                    `${previousAnswer}`,
+                    '↓',
+                    `${answer}`,
                 ].join('\n');
             }
 
-            /*
-            * Người dùng quay lại
-            * và thay đổi đáp án.
-            */
-
             return [
-                '🔄 Câu trả lời đã thay đổi',
+                `💌 Câu hỏi ${questionNumber}`,
                 '',
                 question,
                 '',
-                `${previousAnswer}`,
-                '↓',
-                `${answer}`,
+                `→ ${answer}`,
             ].join('\n');
         }
-        case 'gift_selected':
-            return [
-                '🎁 Có người vừa chọn quà',
-                '',
-                String(
-                    payload.giftName ??
-                        payload.giftId ??
-                        'Gift',
-                ),
-            ].join('\n');
 
-        case 'completed':
+        case 'gift_selected': {
+            const giftNumber =
+                String(
+                    payload.giftNumber ??
+                        '?',
+                );
+
+            const giftHint =
+                String(
+                    payload.giftHint ??
+                        'Can not get hint',
+                );
+
             return [
-                '✨ Birthday completed!',
+                '🎁 Đã chọn hộp quà',
                 '',
-                'Đã đi tới Memories ♡',
+                `→ Hộp số ${giftNumber}`,
+                '',
+                `💡 Gợi ý: ${giftHint}`,
             ].join('\n');
+        }
+
+        case 'memories_reached': {
+            return [
+                '✨ Đã tới Memories',
+                '',
+                'Người dùng đã đi tới bước cuối cùng ♡',
+            ].join('\n');
+        }
+        
+        case 'password_attempt': {
+            const value =
+                String(
+                    payload.value ?? '',
+                );
+
+            const correct =
+                payload.correct === true;
+
+            return [
+                correct
+                    ? '🔐 Password đúng'
+                    : '🔐 Password sai',
+
+                '',
+
+                `Password: ${value}`,
+
+                '',
+
+                correct
+                    ? '✅ Chính xác'
+                    : '❌ Chưa đúng',
+            ].join('\n');
+        }
+
+        case 'troll_answered': {
+            const answer =
+                payload.answer === 'yes'
+                    ? 'Có ❤️'
+                    : 'Không 😭';
+
+            return [
+                '😈 Câu hỏi troll',
+                '',
+                `→ ${answer}`,
+            ].join('\n');
+        }
 
         default:
             return '🎂 Birthday event';
