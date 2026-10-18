@@ -28,6 +28,16 @@ export { default as image24 } from './image-24.jpg';
 export { default as image25 } from './image-25.jpg';
 export { default as image26 } from './image-26.jpg';
 export { default as image27 } from './image-27.jpg';
+export { default as image28 } from './image-28.jpg';
+export { default as image29 } from './image-29.jpg';
+export { default as image30 } from './image-30.jpg';
+export { default as image31 } from './image-31.jpg';
+export { default as image32 } from './image-32.jpg';
+export { default as image33 } from './image-33.jpg';
+export { default as image34 } from './image-34.jpg';
+export { default as image35 } from './image-35.jpg';
+export { default as image36 } from './image-36.jpg';
+export { default as image37 } from './image-37.jpg';
 
 
 export { default as coverImage } from './coverImage.png';

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import styles from './PhotoSlider.module.scss';
 
-const AUTO_FLIP_DELAY = 5000;
+const AUTO_FLIP_DELAY = 3000;
 
 function PhotoSlider({ images = [], coverImage, backgroundImage }) {
     /*
