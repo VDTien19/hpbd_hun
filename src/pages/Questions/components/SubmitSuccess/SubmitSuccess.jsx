@@ -34,7 +34,7 @@ function SubmitSuccess({
 
             <p className={styles.text}>
                 {state === 'ready'
-                    ? 'Giờ thì đi nhận quà thuiii 🎁'
+                    ? 'Giờ thì đi thuiii 🎁'
                     : 'Đang cất điều ước vào một góc thật xinh...'}
             </p>
 
