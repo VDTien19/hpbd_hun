@@ -46,9 +46,9 @@ import {
 } from '@/assets/images';
 
 function Wishes() {
-    const message = `Chúc mừng sinh nhật bạn nhỏ 🎂♡
+    const message = `Chúc mừng sinh nhật bạn Hương nhaaa♡
 Tuổi mới mong bạn luôn vui vẻ, bình an và gặp thật nhiều điều tốt đẹp. Mong những điều bạn đang cố gắng rồi sẽ có kết quả, những chuyện làm bạn mệt mỏi cũng sẽ dần nhẹ nhàng hơn.
-Tôi không biết sau này mình sẽ đồng hành cùng bạn được bao lâu, nhưng ít nhất ở hiện tại, tôi vẫn thật lòng mong bạn có một tuổi mới thật đáng nhớ.
+Chúc bạn đánh nền không mốc, tán má không biết, kẻ mắt 5 giây, gắn mi nhoay nhoáy. Đặc biệt quét nhà không ra tóc và không khóc vì đàn ông.
 Happy Birthday, Hunhun ♡`;
 
     // const message = ``;

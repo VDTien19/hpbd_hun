@@ -45,12 +45,12 @@ function SubmitSuccess({
                     }
                 >
                     <Button
-                        to="/gifts"
+                        to="/memories"
                         className={
                             styles.button
                         }
                     >
-                        Đi nhận quà thui ♡
+                        Đi tiếp thui ♡
                     </Button>
                 </div>
             )}
